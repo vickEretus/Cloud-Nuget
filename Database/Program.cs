@@ -1,31 +1,16 @@
-﻿using System;
+﻿using Database;
+using System;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private async static Task Main(string[] args)
     {
-        string connectionString;
-        {
-            string databaseName = "revmetrix-u";
-            connectionString = $"Server=localhost;database={databaseName};Integrated Security=True;";
-        }
+        AbstractDatabase UserDB = new UserDB();
 
-        using (var connection = new SqlConnection(connectionString))
-        {
-            try
-            {
-                connection.Open();
+        _ = await UserDB.Reset();
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+
     }
 }

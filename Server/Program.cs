@@ -12,6 +12,8 @@ internal class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+        //_ = builder.WebHost.UseSetting("https_port", "443");
+
         _ = builder.Services.AddScoped<VerifyJWTBlacklistMiddleware>();
 
         _ = builder.Logging.ClearProviders();
@@ -48,7 +50,7 @@ internal class Program
             _ = app.UseSwaggerUI();
         }
 
-        //app.UseHttpsRedirection();
+        // app.UseHttpsRedirection();
         
         // Verify token not blacklisted
         _ = app.UseMiddleware<VerifyJWTBlacklistMiddleware>();
