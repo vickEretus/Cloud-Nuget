@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Database
@@ -14,7 +11,7 @@ namespace Database
 
         }
 
-        public async override Task<bool> Reset()
+        public override async Task<bool> Reset()
         {
             await Connection.OpenAsync();
 
@@ -22,20 +19,20 @@ namespace Database
 
             // Disable foreign key constraints
             command.CommandText = "EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'";
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
 
             // Delete data from all tables
             command.CommandText = "EXEC sp_MSforeachtable 'DELETE FROM ?'";
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
 
             // Enable foreign key constraints
             command.CommandText = "EXEC sp_MSforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'";
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
 
             var sqlCommand2 = new SqlCommand("CREATE TABLE Users(Username int, Email varchar(255));", Connection);
 
             Console.WriteLine(await sqlCommand2.ExecuteReaderAsync());
-            
+
             Connection.Close();
 
             return true;

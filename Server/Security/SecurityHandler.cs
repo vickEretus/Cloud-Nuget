@@ -1,7 +1,4 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace Server.Security;

@@ -1,5 +1,4 @@
 ﻿using Common.Logging;
-using Common.POCOs;
 using System.Net.Http.Headers;
 
 namespace Client;
@@ -25,7 +24,7 @@ public class APIConnection
         Client.BaseAddress = new Uri(URL);
         Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
-    
+
     #region Get
     /// <summary>
     /// Generates an asyncronous get request to the specified url
@@ -111,7 +110,7 @@ public class APIConnection
     #endregion
 
     #region Post
-    //// <summary>
+    /// <summary>
     /// Generates an asyncronous post request to the specified url
     /// </summary>
     /// <typeparam name="TResult">Expected response POCO</typeparam>

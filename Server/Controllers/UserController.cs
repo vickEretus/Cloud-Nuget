@@ -6,7 +6,6 @@ namespace Server.Controllers;
 // Authorize Refresh Register
 // Logout Unregister ChangePassword
 
-
 [ApiController]
 [Route("api/[controller]")]
 public class UserController : AbstractFeaturedController
@@ -17,7 +16,7 @@ public class UserController : AbstractFeaturedController
         // Validate user credentials (e.g., check against a database)
         if (ServerState.UserStore.VerifyUser(userIdentification.Username, userIdentification.Password, out string[]? roles))
         {
-            var (authorizationToken, refreshToken) = ServerState.TokenStore.GenerateTokenSet(userIdentification.Username, roles);
+            (string authorizationToken, string refreshToken) = ServerState.TokenStore.GenerateTokenSet(userIdentification.Username, roles);
 
             // Return the token as a response
             return Ok(new DualToken(authorizationToken, refreshToken));
@@ -36,7 +35,8 @@ public class UserController : AbstractFeaturedController
             {
                 string newAuthorizationToken = ServerState.TokenStore.GenerateAuthorizationToken(username, roles);
                 return Ok(new DualToken(newAuthorizationToken, newRefreshToken));
-            } else
+            }
+            else
             {
                 // If credentials are invalid, return a 403 Forbid response
                 return Forbid();
@@ -49,11 +49,9 @@ public class UserController : AbstractFeaturedController
     [HttpPost("Register", Name = "Register")]
     public IActionResult Register([FromBody] UserIdentification userIdentification)
     {
-        if (ServerState.UserStore.CreateUser(userIdentification.Username, userIdentification.Password, new string[] { "user" })) {
-            return Authorize(userIdentification);
-        }
-
-        return Conflict();
+        return ServerState.UserStore.CreateUser(userIdentification.Username, userIdentification.Password, new string[] { "user" })
+            ? Authorize(userIdentification)
+            : Conflict();
     }
 
     [Authorize]
@@ -77,8 +75,5 @@ public class UserController : AbstractFeaturedController
 
     [Authorize]
     [HttpPost("Unregister", Name = "Unregister")]
-    public IActionResult Unregister([FromBody] UserIdentification userIdentification)
-    {
-        throw new NotImplementedException();
-    }
+    public IActionResult Unregister([FromBody] UserIdentification userIdentification) => throw new NotImplementedException();
 }

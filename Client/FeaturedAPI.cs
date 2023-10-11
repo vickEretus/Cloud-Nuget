@@ -21,7 +21,7 @@ public class FeaturedAPI : APIConnection
     /// </summary>
     /// <param name="token">JWT to set header to</param>
     public void SetAuthJWT(string token) => Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    
+
     /// <summary>
     /// Attempts to refresh JWT using <see cref="RefreshToken"/>. If unsucessful or not present, login using provided arguments
     /// </summary>
@@ -88,7 +88,7 @@ public class FeaturedAPI : APIConnection
     /// <returns></returns>
     public async Task Logout()
     {
-        var result = await Delete("User/Logout");
+        APIResponse result = await Delete("User/Logout");
         if (result.WasSuccessful)
         {
             RefreshToken = null;
@@ -104,9 +104,9 @@ public class FeaturedAPI : APIConnection
     /// <returns><see cref="APIResponse"/> representing result of first or second call to <paramref name="apiRequest"/></returns>
     public static async Task<APIResponse> ExecuteWithAutomaticErrorHandler(Func<Task<APIResponse>> apiRequest, APIRequestErrorHandler errorHandler)
     {
-        var result = await apiRequest.Invoke();
+        APIResponse result = await apiRequest.Invoke();
 
-        var action = errorHandler.Find(result);
+        Func<Task>? action = errorHandler.Find(result);
 
         if (action == null) return result;
 
@@ -124,9 +124,9 @@ public class FeaturedAPI : APIConnection
     /// <returns><see cref="APIResponse{TResult}"/> representing result of first or second call to <paramref name="apiRequest"/></returns>
     public static async Task<APIResponse<TResult>> ExecuteWithAutomaticErrorHandler<TResult>(Func<Task<APIResponse<TResult>>> apiRequest, APIRequestErrorHandler errorHandler)
     {
-        var result = await apiRequest.Invoke();
+        APIResponse<TResult> result = await apiRequest.Invoke();
 
-        var action = errorHandler.Find(result);
+        Func<Task>? action = errorHandler.Find(result);
 
         if (action == null) return result;
 

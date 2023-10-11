@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Server;
 using Server.Middleware;
@@ -51,7 +49,7 @@ internal class Program
         }
 
         // app.UseHttpsRedirection();
-        
+
         // Verify token not blacklisted
         _ = app.UseMiddleware<VerifyJWTBlacklistMiddleware>();
 

@@ -7,7 +7,7 @@ public class NaiveTokenStore : AbstractTokenStore
     public readonly Dictionary<string, (string username, DateTime expiration)> TokenStorage = new();
     public readonly HashSet<string> JWTBlacklist = new();
 
-    public NaiveTokenStore(TimeSpan defaultAuthoriationExpiration, TimeSpan defaultRefreshExpiration, TimeSpan clockSkew) : base(defaultAuthoriationExpiration, defaultRefreshExpiration, clockSkew) {}
+    public NaiveTokenStore(TimeSpan defaultAuthoriationExpiration, TimeSpan defaultRefreshExpiration, TimeSpan clockSkew) : base(defaultAuthoriationExpiration, defaultRefreshExpiration, clockSkew) { }
 
     public override (string token, string username, DateTime expiration)? RemoveRefreshToken(string token)
     {
@@ -31,7 +31,7 @@ public class NaiveTokenStore : AbstractTokenStore
     public override bool IsAuthorizationBlacklisted(string jwt) => JWTBlacklist.Contains(jwt);
     public override void RemoveRelatedRefreshTokens(string username)
     {
-        foreach (var item in TokenStorage.Where(kvp => kvp.Value.username == username).ToList())
+        foreach (KeyValuePair<string, (string username, DateTime expiration)> item in TokenStorage.Where(kvp => kvp.Value.username == username).ToList())
         {
             _ = TokenStorage.Remove(item.Key);
         }

@@ -11,9 +11,9 @@ namespace Server.Security;
 /// </summary>
 public abstract class AbstractTokenStore
 {
-    private TimeSpan DefaultAuthorizationExpiration;
-    private TimeSpan DefaultRefreshExpiration;
-    private TimeSpan ClockSkew;
+    private readonly TimeSpan DefaultAuthorizationExpiration;
+    private readonly TimeSpan DefaultRefreshExpiration;
+    private readonly TimeSpan ClockSkew;
 
     public AbstractTokenStore(TimeSpan defaultAuthoriationExpiration, TimeSpan defaultRefreshExpiration, TimeSpan clockSkew)
     {
@@ -22,7 +22,7 @@ public abstract class AbstractTokenStore
         ClockSkew = clockSkew;
     }
 
-    public string GenerateAuthorizationToken(string username, string[] roles) => GenerateAuthorizationToken(username, roles, DefaultAuthorizationExpiration);
+    public string GenerateAuthorizationToken(string username, string[]? roles) => GenerateAuthorizationToken(username, roles, DefaultAuthorizationExpiration);
     public string GenerateAuthorizationToken(string username, string[]? roles, TimeSpan expiration)
     {
         var claims = new List<Claim>
@@ -40,7 +40,6 @@ public abstract class AbstractTokenStore
                 claims.Add(new Claim(ClaimTypes.Role, role));
             };
         }
-        
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -74,7 +73,7 @@ public abstract class AbstractTokenStore
 
     public bool RemoveAndVerifyRefreshToken(string token, [NotNullWhen(true)] out string? username, [NotNullWhen(true)] out string? newRefreshToken)
     {
-        var removed = RemoveRefreshToken(token);
+        (string token, string username, DateTime expiration)? removed = RemoveRefreshToken(token);
 
         if (removed.HasValue)
         {
@@ -85,7 +84,7 @@ public abstract class AbstractTokenStore
                 return true;
             }
         }
-        
+
         username = null;
         newRefreshToken = null;
         return false;
