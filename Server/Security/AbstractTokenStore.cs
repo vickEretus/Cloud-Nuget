@@ -48,7 +48,7 @@ public abstract class AbstractTokenStore
 
             Expires = DateTime.UtcNow.Add(expiration), // Token expiration time
 
-            SigningCredentials = SecurityHandler.AuthorizationSigningCredentials
+            SigningCredentials = ServerState.SecurityHandler.AuthorizationSigningCredentials
         };
 
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);

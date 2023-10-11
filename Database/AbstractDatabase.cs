@@ -13,7 +13,5 @@ namespace Database
             ConnectionString = $"Server=localhost;database={databaseName};Integrated Security=True;";
             Connection = new SqlConnection(ConnectionString);
         }
-
-        public abstract Task<bool> Reset();
     }
 }

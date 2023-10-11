@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Database
 {
-    public class UserDB : AbstractDatabase
+    public class ResearchDB : AbstractDatabase
     {
-        public UserDB() : base("revmetrix-u")
+        public ResearchDB() : base("revmetrix-r")
         {
 
         }

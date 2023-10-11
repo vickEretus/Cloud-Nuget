@@ -1,4 +1,5 @@
-﻿using Server.Security;
+﻿using Database;
+using Server.Security;
 
 namespace Server;
 
@@ -10,6 +11,8 @@ namespace Server;
 /// </summary>
 public static class ServerState
 {
+    public static readonly SecurityHandler SecurityHandler = new();
+
     public static readonly AbstractTokenStore TokenStore = new NaiveTokenStore(TimeSpan.FromMinutes(60), TimeSpan.FromHours(24), TimeSpan.FromMinutes(5));
 
     public static readonly AbstractUserStore UserStore = new NaiveUserStore(new()
@@ -17,4 +20,7 @@ public static class ServerState
         {"user", ("pass", new string[] {"user" })},
         {"admin", ("root", new string[] {"admin" }) }
     });
+
+    public static readonly UserDB UserDatabase = new();
+    public static readonly ResearchDB ResearchDatabase = new();
 }

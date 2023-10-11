@@ -34,7 +34,7 @@ internal class Program
                 ValidateLifetime = true,
                 ValidIssuer = Config.AuthIssuer,
                 ValidAudience = Config.AuthAudience,
-                IssuerSigningKey = SecurityHandler.AuthorizationSigningTokenKey,
+                IssuerSigningKey = ServerState.SecurityHandler.AuthorizationSigningTokenKey,
                 ClockSkew = TimeSpan.FromMinutes(5)
             };
         });
