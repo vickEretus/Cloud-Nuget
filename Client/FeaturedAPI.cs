@@ -122,7 +122,7 @@ public class FeaturedAPI : APIConnection
     /// <param name="apiRequest">API request method (<see cref="APIConnection"/> or <see cref="FeaturedAPI"/>) to execute - lambda expressions</param>
     /// <param name="errorHandler">The error handler to execute using predicate (<paramref name="apiRequest"/> result)</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing result of first or second call to <paramref name="apiRequest"/></returns>
-    public static async Task<APIResponse<TResult>> ExecuteWithAutomaticErrorHandler<TResult>(Func<Task<APIResponse<TResult>>> apiRequest, APIRequestErrorHandler errorHandler)
+    public static async Task<APIResponse<TResult>> ExecuteWithAutomaticErrorHandler<TResult>(Func<Task<APIResponse<TResult>>> apiRequest, APIRequestErrorHandler errorHandler) where TResult : POCO
     {
         APIResponse<TResult> result = await apiRequest.Invoke();
 
