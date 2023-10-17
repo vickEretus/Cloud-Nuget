@@ -1,5 +1,4 @@
-﻿using Common.POCOs;
-using System.Net;
+﻿using System.Net;
 
 namespace Client;
 
@@ -7,7 +6,7 @@ namespace Client;
 /// Response from API request with a POCO result
 /// </summary>
 /// <typeparam name="TResult">POCO expected to be returned by API request</typeparam>
-public class APIResponse<TResult> : APIResponse where TResult : POCO
+public class APIResponse<TResult> : APIResponse
 {
     /// <summary>
     /// Result from API request. Null if invalid
