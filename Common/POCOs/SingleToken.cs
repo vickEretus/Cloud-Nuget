@@ -1,5 +1,5 @@
 ﻿namespace Common.POCOs;
-public class SingleToken
+public class SingleToken : POCO
 {
     public SingleToken(string token) => Token = token;
 

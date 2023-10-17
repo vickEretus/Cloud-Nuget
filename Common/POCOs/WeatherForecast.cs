@@ -1,6 +1,6 @@
 namespace Common.POCOs;
 
-public class WeatherForecast
+public class WeatherForecast : POCO
 {
     public DateOnly Date { get; set; }
 
