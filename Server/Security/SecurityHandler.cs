@@ -1,5 +1,4 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System.Net;
 using System.Security.Cryptography;
 
 namespace Server.Security;
@@ -10,14 +9,13 @@ public class SecurityHandler
 
     public readonly SymmetricSecurityKey AuthorizationSigningTokenKey;
     public readonly SigningCredentials AuthorizationSigningCredentials;
-    
+
     public SecurityHandler()
     {
         AuthorizationSigningTokenKey = GenerateSymmetricKey(Config.AuthSecretLength);
         AuthorizationSigningCredentials = new(AuthorizationSigningTokenKey, SecurityAlgorithms.HmacSha256Signature);
     }
 
-    
     private byte[] GenerateRandomBytes(int length)
     {
         byte[] randomBytes = new byte[length];

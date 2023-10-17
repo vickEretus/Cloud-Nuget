@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Server;
 using Server.Middleware;
-using Server.Security;
 
 internal class Program
 {

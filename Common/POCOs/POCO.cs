@@ -1,2 +1,2 @@
 ﻿namespace Common.POCOs;
-public abstract class POCO {}
+public abstract class POCO { }

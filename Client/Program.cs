@@ -1,6 +1,5 @@
 using Client;
 using Common.Logging;
-using Common.POCOs;
 using System.Net;
 
 internal class Program
@@ -13,26 +12,13 @@ internal class Program
     {
         LogWriter.OutputLevel = Common.Logging.LogLevel.DEBUG;
 
-        await GetWeather();
+        await Connection.Login("admin", "root");
+
+        Thread.Sleep(1000);
 
         await Connection.Logout();
 
-        await GetWeather();
-
         Thread.Sleep(1000);
-    }
-
-    private static async Task GetWeather()
-    {
-        APIResponse<WeatherForecast[]> response = await FeaturedAPI.ExecuteWithAutomaticErrorHandler(async () => await Connection.Get<WeatherForecast[]>("WeatherForecast/GetWeatherForecast"), LoginOn401);
-
-        if (response != null && response.IsValid)
-        {
-            foreach (WeatherForecast forecast in response.Result!)
-            {
-                LogWriter.LogInfo(forecast);
-            }
-        }
     }
 
 }

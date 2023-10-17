@@ -1,8 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
-
-namespace Database
+﻿namespace Database
 {
     public class ResearchDB : AbstractDatabase
     {
@@ -11,6 +7,5 @@ namespace Database
 
         }
 
-        
     }
 }
