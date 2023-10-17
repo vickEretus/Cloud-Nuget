@@ -1,5 +1,5 @@
 ﻿namespace Common.POCOs;
-public class UserIdentification : POCO
+public class UserIdentification
 {
     public UserIdentification(string username, string password)
     {

@@ -1,5 +1,4 @@
 ﻿using Common.Logging;
-using Common.POCOs;
 using System.Net.Http.Headers;
 
 namespace Client;
@@ -27,13 +26,13 @@ public class APIConnection
     }
 
     #region Get
-    /// /// <summary>
+    /// <summary>
     /// Generates an asyncronous get request to the specified url
     /// </summary>
     /// <typeparam name="TResult">Expected response POCO</typeparam>
     /// <param name="url">Url to send the request to</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Get<TResult>(string url) where TResult : POCO => await Get<TResult>(url, CancellationToken.None);
+    public async Task<APIResponse<TResult>> Get<TResult>(string url) => await Get<TResult>(url, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous get request to the specified url
@@ -49,7 +48,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="urlParameters">Url Parameters</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Get<TResult>(string url, UrlParameters urlParameters) where TResult : POCO => await Get<TResult>(url + urlParameters.ToUrlParameters());
+    public async Task<APIResponse<TResult>> Get<TResult>(string url, UrlParameters urlParameters) => await Get<TResult>(url + urlParameters.ToUrlParameters());
 
     /// <summary>
     /// Generates an asyncronous get request to the specified url
@@ -67,7 +66,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Get<TResult>(string url, UrlParameters urlParameters, CancellationToken cancellationToken) where TResult : POCO => await Get<TResult>(url + urlParameters.ToUrlParameters(), cancellationToken);
+    public async Task<APIResponse<TResult>> Get<TResult>(string url, UrlParameters urlParameters, CancellationToken cancellationToken) => await Get<TResult>(url + urlParameters.ToUrlParameters(), cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous get request to the specified url
@@ -85,7 +84,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Get<TResult>(string url, CancellationToken cancellationToken) where TResult : POCO
+    public async Task<APIResponse<TResult>> Get<TResult>(string url, CancellationToken cancellationToken)
     {
         LogWriter.LogInfo("Get Issued");
 
@@ -119,7 +118,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, TValue content) where TResult : POCO where TValue : POCO => await Post<TResult, TValue>(url, content, CancellationToken.None);
+    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, TValue content) => await Post<TResult, TValue>(url, content, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous post request to the specified url
@@ -128,7 +127,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Post<TValue>(string url, TValue content) where TValue : POCO => await Post<TValue>(url, content, CancellationToken.None);
+    public async Task<APIResponse> Post<TValue>(string url, TValue content) => await Post<TValue>(url, content, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous post request to the specified url
@@ -139,7 +138,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, UrlParameters urlParameters, TValue content) where TResult : POCO where TValue : POCO => await Post<TResult, TValue>(url + urlParameters.ToUrlParameters(), content);
+    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, UrlParameters urlParameters, TValue content) => await Post<TResult, TValue>(url + urlParameters.ToUrlParameters(), content);
 
     /// <summary>
     /// Generates an asyncronous post request to the specified url
@@ -149,7 +148,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Post<TValue>(string url, UrlParameters urlParameters, TValue content) where TValue : POCO => await Post(url + urlParameters.ToUrlParameters(), content);
+    public async Task<APIResponse> Post<TValue>(string url, UrlParameters urlParameters, TValue content) => await Post(url + urlParameters.ToUrlParameters(), content);
 
     /// <summary>
     /// Generates an asyncronous post request to the specified url
@@ -161,7 +160,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) where TResult : POCO where TValue : POCO => await Post<TResult, TValue>(url + urlParameters.ToUrlParameters(), content, cancellationToken);
+    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) => await Post<TResult, TValue>(url + urlParameters.ToUrlParameters(), content, cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous post request to the specified url
@@ -172,7 +171,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Post<TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) where TValue : POCO => await Post(url + urlParameters.ToUrlParameters(), content, cancellationToken);
+    public async Task<APIResponse> Post<TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) => await Post(url + urlParameters.ToUrlParameters(), content, cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous post request to the specified url
@@ -183,7 +182,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, TValue content, CancellationToken cancellationToken) where TResult : POCO where TValue : POCO
+    public async Task<APIResponse<TResult>> Post<TResult, TValue>(string url, TValue content, CancellationToken cancellationToken)
     {
         var payload = JsonContent.Create(content);
 
@@ -202,7 +201,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Post<TValue>(string url, TValue content, CancellationToken cancellationToken) where TValue : POCO
+    public async Task<APIResponse> Post<TValue>(string url, TValue content, CancellationToken cancellationToken)
     {
         var payload = JsonContent.Create(content);
 
@@ -223,7 +222,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, TValue content) where TResult : POCO where TValue : POCO => await Put<TResult, TValue>(url, content, CancellationToken.None);
+    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, TValue content) => await Put<TResult, TValue>(url, content, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous put request to the specified url
@@ -232,7 +231,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Put<TValue>(string url, TValue content) where TValue : POCO => await Put<TValue>(url, content, CancellationToken.None);
+    public async Task<APIResponse> Put<TValue>(string url, TValue content) => await Put<TValue>(url, content, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous put request to the specified url
@@ -243,7 +242,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, UrlParameters urlParameters, TValue content) where TResult : POCO where TValue : POCO => await Put<TResult, TValue>(url + urlParameters.ToUrlParameters(), content);
+    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, UrlParameters urlParameters, TValue content) => await Put<TResult, TValue>(url + urlParameters.ToUrlParameters(), content);
 
     /// <summary>
     /// Generates an asyncronous put request to the specified url
@@ -253,7 +252,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Put<TValue>(string url, UrlParameters urlParameters, TValue content) where TValue : POCO => await Put(url + urlParameters.ToUrlParameters(), content);
+    public async Task<APIResponse> Put<TValue>(string url, UrlParameters urlParameters, TValue content) => await Put(url + urlParameters.ToUrlParameters(), content);
 
     /// <summary>
     /// Generates an asyncronous put request to the specified url
@@ -265,7 +264,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) where TResult : POCO where TValue : POCO => await Put<TResult, TValue>(url + urlParameters.ToUrlParameters(), content, cancellationToken);
+    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) => await Put<TResult, TValue>(url + urlParameters.ToUrlParameters(), content, cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous put request to the specified url
@@ -276,7 +275,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Put<TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) where TValue : POCO => await Put(url + urlParameters.ToUrlParameters(), content, cancellationToken);
+    public async Task<APIResponse> Put<TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) => await Put(url + urlParameters.ToUrlParameters(), content, cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous put request to the specified url
@@ -287,7 +286,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, TValue content, CancellationToken cancellationToken) where TResult : POCO where TValue : POCO
+    public async Task<APIResponse<TResult>> Put<TResult, TValue>(string url, TValue content, CancellationToken cancellationToken)
     {
         var payload = JsonContent.Create(content);
 
@@ -306,7 +305,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Put<TValue>(string url, TValue content, CancellationToken cancellationToken) where TValue : POCO
+    public async Task<APIResponse> Put<TValue>(string url, TValue content, CancellationToken cancellationToken)
     {
         var payload = JsonContent.Create(content);
 
@@ -327,7 +326,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, TValue content) where TResult : POCO where TValue : POCO => await Patch<TResult, TValue>(url, content, CancellationToken.None);
+    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, TValue content) => await Patch<TResult, TValue>(url, content, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous patch request to the specified url
@@ -336,7 +335,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Patch<TValue>(string url, TValue content) where TValue : POCO => await Patch<TValue>(url, content, CancellationToken.None);
+    public async Task<APIResponse> Patch<TValue>(string url, TValue content) => await Patch<TValue>(url, content, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous patch request to the specified url
@@ -347,7 +346,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, UrlParameters urlParameters, TValue content) where TResult : POCO where TValue : POCO => await Patch<TResult, TValue>(url + urlParameters.ToUrlParameters(), content);
+    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, UrlParameters urlParameters, TValue content) => await Patch<TResult, TValue>(url + urlParameters.ToUrlParameters(), content);
 
     /// <summary>
     /// Generates an asyncronous patch request to the specified url
@@ -357,7 +356,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="content">POCO representing request body</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Patch<TValue>(string url, UrlParameters urlParameters, TValue content) where TValue : POCO => await Patch(url + urlParameters.ToUrlParameters(), content);
+    public async Task<APIResponse> Patch<TValue>(string url, UrlParameters urlParameters, TValue content) => await Patch(url + urlParameters.ToUrlParameters(), content);
 
     /// <summary>
     /// Generates an asyncronous patch request to the specified url
@@ -369,7 +368,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) where TResult : POCO where TValue : POCO => await Patch<TResult, TValue>(url + urlParameters.ToUrlParameters(), content, cancellationToken);
+    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) => await Patch<TResult, TValue>(url + urlParameters.ToUrlParameters(), content, cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous patch request to the specified url
@@ -380,7 +379,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Patch<TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) where TValue : POCO => await Patch(url + urlParameters.ToUrlParameters(), content, cancellationToken);
+    public async Task<APIResponse> Patch<TValue>(string url, UrlParameters urlParameters, TValue content, CancellationToken cancellationToken) => await Patch(url + urlParameters.ToUrlParameters(), content, cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous patch request to the specified url
@@ -391,7 +390,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, TValue content, CancellationToken cancellationToken) where TResult : POCO where TValue : POCO
+    public async Task<APIResponse<TResult>> Patch<TResult, TValue>(string url, TValue content, CancellationToken cancellationToken)
     {
         var payload = JsonContent.Create(content);
 
@@ -410,7 +409,7 @@ public class APIConnection
     /// <param name="content">POCO representing request body</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse"/> representing the result from the request</returns>
-    public async Task<APIResponse> Patch<TValue>(string url, TValue content, CancellationToken cancellationToken) where TValue : POCO
+    public async Task<APIResponse> Patch<TValue>(string url, TValue content, CancellationToken cancellationToken)
     {
         var payload = JsonContent.Create(content);
 
@@ -429,7 +428,7 @@ public class APIConnection
     /// <typeparam name="TResult">Expected response POCO</typeparam>
     /// <param name="url">Url to send the request to</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Delete<TResult>(string url) where TResult : POCO => await Delete<TResult>(url, CancellationToken.None);
+    public async Task<APIResponse<TResult>> Delete<TResult>(string url) => await Delete<TResult>(url, CancellationToken.None);
 
     /// <summary>
     /// Generates an asyncronous delete request to the specified url
@@ -445,7 +444,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="urlParameters">Url Parameters</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Delete<TResult>(string url, UrlParameters urlParameters) where TResult : POCO => await Delete<TResult>(url + urlParameters.ToUrlParameters());
+    public async Task<APIResponse<TResult>> Delete<TResult>(string url, UrlParameters urlParameters) => await Delete<TResult>(url + urlParameters.ToUrlParameters());
 
     /// <summary>
     /// Generates an asyncronous delete request to the specified url
@@ -463,7 +462,7 @@ public class APIConnection
     /// <param name="urlParameters">Url Parameters</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Delete<TResult>(string url, UrlParameters urlParameters, CancellationToken cancellationToken) where TResult : POCO => await Delete<TResult>(url + urlParameters.ToUrlParameters(), cancellationToken);
+    public async Task<APIResponse<TResult>> Delete<TResult>(string url, UrlParameters urlParameters, CancellationToken cancellationToken) => await Delete<TResult>(url + urlParameters.ToUrlParameters(), cancellationToken);
 
     /// <summary>
     /// Generates an asyncronous delete request to the specified url
@@ -481,7 +480,7 @@ public class APIConnection
     /// <param name="url">Url to send the request to</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns><see cref="APIResponse{TResult}"/> representing the result from the request</returns>
-    public async Task<APIResponse<TResult>> Delete<TResult>(string url, CancellationToken cancellationToken) where TResult : POCO
+    public async Task<APIResponse<TResult>> Delete<TResult>(string url, CancellationToken cancellationToken)
     {
         LogWriter.LogInfo("Delete Issued");
 
@@ -506,7 +505,7 @@ public class APIConnection
     }
     #endregion
 
-    private static async Task<APIResponse<TResult>> GenerateResult<TResult>(string requestType, HttpResponseMessage response, CancellationToken cancellationToken) where TResult : POCO
+    private static async Task<APIResponse<TResult>> GenerateResult<TResult>(string requestType, HttpResponseMessage response, CancellationToken cancellationToken)
     {
         if (response.IsSuccessStatusCode)
         {
