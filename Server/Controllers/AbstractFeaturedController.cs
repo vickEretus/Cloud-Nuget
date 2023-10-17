@@ -1,5 +1,4 @@
-﻿using Common.POCOs;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Server.Controllers;
 
