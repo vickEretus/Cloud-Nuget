@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Server.Security;
 
@@ -24,4 +25,22 @@ public class SecurityHandler
     }
 
     private SymmetricSecurityKey GenerateSymmetricKey(int length) => new(GenerateRandomBytes(length));
+
+    public (byte[] hashed, byte[] salt) SaltHashPassword(string password)
+    {
+        byte[] salt = GenerateRandomBytes(16);
+        byte[] hashed = SaltHashPassword(password, salt);
+        return (hashed, salt);
+    }
+
+    public byte[] SaltHashPassword(string password, byte[] salt)
+    {
+        byte[] passwordbytes = Encoding.ASCII.GetBytes(password);
+        var s = new MemoryStream();
+        s.Write(passwordbytes, 0, passwordbytes.Length);
+        s.Write(salt, 0, salt.Length);
+        byte[] combined = s.ToArray();
+        byte[] hashed = SHA256.HashData(combined);
+        return hashed;
+    }
 }

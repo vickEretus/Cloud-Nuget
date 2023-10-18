@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Database;
-using System.Data.SqlClient;
+﻿using Database;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -8,11 +7,8 @@ public class InsertController : ControllerBase
 {
     private readonly UserDB _userDB;
 
-    public InsertController(UserDB userDB)
-    {
-        _userDB = userDB;
-    }
-
+    public InsertController(UserDB userDB) => _userDB = userDB;
+    /*
     [HttpPost("CreateUser", Name = "CreateUser")]
     public async Task<IActionResult> CreateUser([FromBody] string name, [FromBody] string email, [FromBody] int phone_number)
     {
@@ -42,7 +38,7 @@ public class InsertController : ControllerBase
         }
 
         return BadRequest("Invalid input");
-    }
+    }*/
 
     // Other actions for updating and deleting items
 }

@@ -13,14 +13,11 @@ public static class ServerState
 {
     public static readonly SecurityHandler SecurityHandler = new();
 
-    public static readonly AbstractTokenStore TokenStore = new NaiveTokenStore(TimeSpan.FromMinutes(60), TimeSpan.FromHours(24), TimeSpan.FromMinutes(5));
-
-    public static readonly AbstractUserStore UserStore = new NaiveUserStore(new()
-    {
-        {"user", ("pass", new string[] {"user" })},
-        {"admin", ("root", new string[] {"admin" }) }
-    });
-
     public static readonly UserDB UserDatabase = new();
+
     public static readonly ResearchDB ResearchDatabase = new();
+
+    public static readonly AbstractTokenStore TokenStore = new TempTokenStore(TimeSpan.FromMinutes(60), TimeSpan.FromHours(24), TimeSpan.FromMinutes(5));
+
+    public static readonly AbstractUserStore UserStore = new DatabaseUserStore();
 }

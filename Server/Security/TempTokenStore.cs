@@ -1,13 +1,13 @@
-﻿using Common.Logging;
+﻿
+using Common.Logging;
 
 namespace Server.Security;
-
-public class NaiveTokenStore : AbstractTokenStore
+public class TempTokenStore : AbstractTokenStore
 {
     public readonly Dictionary<string, (string username, DateTime expiration)> TokenStorage = new();
     public readonly HashSet<string> JWTBlacklist = new();
 
-    public NaiveTokenStore(TimeSpan defaultAuthoriationExpiration, TimeSpan defaultRefreshExpiration, TimeSpan clockSkew) : base(defaultAuthoriationExpiration, defaultRefreshExpiration, clockSkew) { }
+    public TempTokenStore(TimeSpan defaultAuthoriationExpiration, TimeSpan defaultRefreshExpiration, TimeSpan clockSkew) : base(defaultAuthoriationExpiration, defaultRefreshExpiration, clockSkew) { }
 
     public override (string token, string username, DateTime expiration)? RemoveRefreshToken(string token)
     {

@@ -11,10 +11,11 @@ namespace Server.Controllers;
 public class UserController : AbstractFeaturedController
 {
     [HttpPost("Authorize", Name = "Authorize")]
-    public IActionResult Authorize([FromBody] UserIdentification userIdentification)
+    public async Task<IActionResult> Authorize([FromBody] UserIdentification userIdentification)
     {
         // Validate user credentials (e.g., check against a database)
-        if (ServerState.UserStore.VerifyUser(userIdentification.Username, userIdentification.Password, out string[]? roles))
+        (bool success, string[]? roles) = await ServerState.UserStore.VerifyUser(userIdentification.Username, userIdentification.Password);
+        if (success)
         {
             (string authorizationToken, string refreshToken) = ServerState.TokenStore.GenerateTokenSet(userIdentification.Username, roles);
 
@@ -27,11 +28,12 @@ public class UserController : AbstractFeaturedController
     }
 
     [HttpPost("Refresh", Name = "Refresh")]
-    public IActionResult Refresh([FromBody] SingleToken refreshToken)
+    public async Task<IActionResult> Refresh([FromBody] SingleToken refreshToken)
     {
         if (ServerState.TokenStore.RemoveAndVerifyRefreshToken(refreshToken.Token, out string? username, out string? newRefreshToken))
         {
-            if (ServerState.UserStore.GetRoles(username, out string[]? roles))
+            (bool success, string[]? roles) = await ServerState.UserStore.GetRoles(username);
+            if (success)
             {
                 string newAuthorizationToken = ServerState.TokenStore.GenerateAuthorizationToken(username, roles);
                 return Ok(new DualToken(newAuthorizationToken, newRefreshToken));
@@ -47,11 +49,11 @@ public class UserController : AbstractFeaturedController
     }
 
     [HttpPost("Register", Name = "Register")]
-    public IActionResult Register([FromBody] UserIdentification userIdentification)
+    public async Task<IActionResult> Register([FromBody] UserIdentification userIdentification)
     {
-        return ServerState.UserStore.CreateUser(userIdentification.Username, userIdentification.Password, new string[] { "user" })
-            ? Authorize(userIdentification)
-            : Conflict();
+        bool result = await ServerState.UserStore.CreateUser(userIdentification.Username, userIdentification.Password, new string[] { "user" });
+
+        return result ? await Authorize(userIdentification) : Conflict();
     }
 
     [Authorize]

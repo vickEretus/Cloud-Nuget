@@ -1,28 +1,49 @@
-﻿using Microsoft.SqlServer.Management.Smo;
-using System;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.SqlServer.Management.Smo;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Database
 {
     public class UserDB : AbstractDatabase
     {
+        /*
+        using (var connection = new SqlConnection(ServerState.UserDatabase.ConnectionString))
+        {
+            connection.Open();
+
+            string insertQuery = "INSERT INTO [User] (username, salt, roles, password, email, phone) " +
+                                 "VALUES (@Username, @Salt, @Roles, @Password, @Email, @Phone)";
+
+            using (SqlCommand command = new SqlCommand(insertQuery, connection))
+            {
+                // Set the parameter values
+                command.Parameters.Add("@Username", SqlDbType.VarChar).Value = "JohnHoe";
+                command.Parameters.Add("@Salt", SqlDbType.VarBinary, 16).Value = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
+                command.Parameters.Add("@Roles", SqlDbType.VarChar).Value = "User";
+                command.Parameters.Add("@Password", SqlDbType.VarBinary, -1).Value = new byte[] { 0xAB, 0xCD, 0xEF, 0x12, 0x34, 0x56, 0x78, 0x90 };
+                command.Parameters.Add("@Email", SqlDbType.VarChar).Value = "john.doe@email.com";
+                command.Parameters.Add("@Phone", SqlDbType.VarChar).Value = "123-456-7890";
+
+                // Execute the query
+                int i = command.ExecuteNonQuery();
+                Console.WriteLine(i);
+            }
+        }
+         */
+
         public UserDB() : base("revmetrix-u")
         {
-            
-        }
-        
-        public void DropIfExists(string value)
-        {
-            var table = Database.Tables[value];
-            table?.DropIfExists();
+
         }
 
         public void CreateTables()
         {
+            Database = new Microsoft.SqlServer.Management.Smo.Database(Server, DatabaseName);
+            Database.Create();
+
             // User Table
             {
-                // Drop old
-                DropIfExists("User");
-
                 // Create new
                 var UserTable = new Table(Database, "User");
 
@@ -75,27 +96,17 @@ namespace Database
                 UserTable.Create();
 
                 // Create the primary key constraint using SQL
-                var sql = "ALTER TABLE [User] ADD CONSTRAINT PK_User PRIMARY KEY (id);";
+                string sql = "ALTER TABLE [User] ADD CONSTRAINT PK_User PRIMARY KEY (id);";
+                Database.ExecuteNonQuery(sql);
+
+                sql = "ALTER TABLE [User] ADD CONSTRAINT UNQ__User__username UNIQUE ([username])";
                 Database.ExecuteNonQuery(sql);
             }
 
             // Token Table
             {
-                // Drop old
-                DropIfExists("Token");
-
                 // Create new
                 var TokenTable = new Table(Database, "Token");
-
-                /*
-                // User ID
-                var userIdKey = new ForeignKey(Database.Tables["User"], "FK_Token_User"); // Choose a descriptive name for the foreign key constraint
-                var userId = new ForeignKeyColumn(userIdKey, "userid", "id");
-                userIdKey.Columns.Add(userId);
-                userIdKey.ReferencedTable = "User";
-                userIdKey.ReferencedTableSchema = "id"; // Specify the referenced column in the "User" table
-                userIdKey.Create();
-                */
 
                 // Expiration
                 var expiration = new Column(TokenTable, "expiration", DataType.DateTime)
@@ -105,8 +116,10 @@ namespace Database
                 TokenTable.Columns.Add(expiration);
 
                 // User ID
-                var userId = new Column(TokenTable, "userid", DataType.BigInt); // Assuming "userid" is the name of the column in "TokenTable" that references "id" in "User" table
-                userId.Nullable = false;
+                var userId = new Column(TokenTable, "userid", DataType.BigInt)
+                {
+                    Nullable = false
+                };
                 TokenTable.Columns.Add(userId);
 
                 // Token
@@ -124,8 +137,10 @@ namespace Database
 
                     // User ID
                     var userIdKey = new ForeignKey(TokenTable, "FK_Token_User");
-                    var userIdKeyCol = new ForeignKeyColumn(userIdKey, "userid");
-                    userIdKeyCol.ReferencedColumn = "id";
+                    var userIdKeyCol = new ForeignKeyColumn(userIdKey, "userid")
+                    {
+                        ReferencedColumn = "id"
+                    };
                     userIdKey.Columns.Add(userIdKeyCol);
                     userIdKey.ReferencedTable = "User";
 
@@ -134,90 +149,113 @@ namespace Database
             }
         }
 
-    }
-    /*
-    public class A
-    {
-        public static void Main()
+        public void Kill() => Database.Drop();
+
+        public async Task<bool> AddUser(string username, byte[] hashedPassword, byte[] salt, string roles, string phone, string email)
         {
-            Server svr = new Server();
-            Database db = new Database(svr, "TESTDB");
-            db.Create();
-
-            // PK Table  
-            Table tab1 = new Table(db, "Table1");
-
-            // Define Columns and add them to the table  
-            Column col1 = new Column(tab1, "Col1", DataType.Int);
-
-            col1.Nullable = false;
-            tab1.Columns.Add(col1);
-            Column col2 = new Column(tab1, "Col2", DataType.NVarChar(50));
-            tab1.Columns.Add(col2);
-            Column col3 = new Column(tab1, "Col3", DataType.DateTime);
-            tab1.Columns.Add(col3);
-
-            // Create the ftable  
-            tab1.Create();
-
-            // Define Index object on the table by supplying the Table1 as the parent table and the primary key name in the constructor.  
-            Index pk = new Index(tab1, "Table1_PK");
-            pk.IndexKeyType = IndexKeyType.DriPrimaryKey;
-
-            // Add Col1 as the Index Column  
-            IndexedColumn idxCol1 = new IndexedColumn(pk, "Col1");
-            pk.IndexedColumns.Add(idxCol1);
-
-            // Create the Primary Key  
-            pk.Create();
-
-            // Create Unique Index on the table  
-            Index unique = new Index(tab1, "Table1_Unique");
-            unique.IndexKeyType = IndexKeyType.DriUniqueKey;
-
-            // Add Col1 as the Unique Index Column  
-            IndexedColumn idxCol2 = new IndexedColumn(unique, "Col2");
-            unique.IndexedColumns.Add(idxCol2);
-
-            // Create the Unique Index  
-            unique.Create();
-
-            // Create Table2                    
-            Table tab2 = new Table(db, "Table2");
-            Column col21 = new Column(tab2, "Col21", DataType.NChar(20));
-            tab2.Columns.Add(col21);
-            Column col22 = new Column(tab2, "Col22", DataType.Int);
-            tab2.Columns.Add(col22);
-            tab2.Create();
-
-            // Define a Foreign Key object variable by supplying the Table2 as the parent table and the foreign key name in the constructor.   
-            ForeignKey fk = new ForeignKey(tab2, "Table2_FK");
-
-            // Add Col22 as the foreign key column.   
-            ForeignKeyColumn fkc = new ForeignKeyColumn(fk, "Col22", "Col1");
-            fk.Columns.Add(fkc);
-            fk.ReferencedTable = "Table1";
-
-            // Create the foreign key on the instance of SQL Server.   
-            fk.Create();
-
-            // Get list of Foreign Keys on Table2  
-            foreach (ForeignKey f in tab2.ForeignKeys)
+            using (var connection = new SqlConnection(ConnectionString))
             {
-                Console.WriteLine(f.Name + " " + f.ReferencedTable + " " + f.ReferencedKey);
-            }
+                await connection.OpenAsync();
 
-            // Get list of Foreign Keys referencing table1  
-            foreach (Table tab in db.Tables)
-            {
-                if (tab == tab1)
-                    continue;
-                foreach (ForeignKey f in tab.ForeignKeys)
+                string insertQuery = "INSERT INTO [User] (username, salt, roles, password, email, phone) " +
+                                     "VALUES (@Username, @Salt, @Roles, @Password, @Email, @Phone)";
+
+                using (var command = new SqlCommand(insertQuery, connection))
                 {
-                    if (f.ReferencedTable.Equals(tab1.Name))
-                        Console.WriteLine(f.Name + " " + f.Parent.Name);
+                    // Set the parameter values
+                    command.Parameters.Add("@Username", SqlDbType.VarChar).Value = username;
+                    command.Parameters.Add("@Salt", SqlDbType.VarBinary, 16).Value = salt;
+                    command.Parameters.Add("@Roles", SqlDbType.VarChar).Value = roles;
+                    command.Parameters.Add("@Password", SqlDbType.VarBinary, -1).Value = hashedPassword;
+                    command.Parameters.Add("@Email", SqlDbType.VarChar).Value = email;
+                    command.Parameters.Add("@Phone", SqlDbType.VarChar).Value = phone;
+
+                    // Execute the query
+                    int i = await command.ExecuteNonQueryAsync();
+                    return i != -1;
                 }
             }
         }
-    }*/
+
+        public async Task<bool> RemoveUser(string username)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+
+                string deleteQuery = "DELETE FROM [User] WHERE username = @Username";
+
+                using (var command = new SqlCommand(deleteQuery, connection))
+                {
+                    command.Parameters.Add("@Username", SqlDbType.VarChar, 255).Value = username;
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
+        public async Task<(bool success, string roles)> GetRoles(string username)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+
+                string selectQuery = "SELECT roles FROM [User] WHERE username = @Username";
+
+                using (var command = new SqlCommand(selectQuery, connection))
+                {
+                    command.Parameters.Add("@Username", SqlDbType.VarChar, 255).Value = username;
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            // Retrieve the "roles" value
+                            string roles = reader["roles"].ToString();
+
+                            return (true, roles);
+                        }
+                        else
+                        {
+                            return (false, null);
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task<(bool success, byte[] salt, string roles, byte[] hashedPassword)> GetUserValidData(string username)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+
+                string selectQuery = "SELECT roles, password, salt FROM [User] WHERE username = @Username";
+
+                using (var command = new SqlCommand(selectQuery, connection))
+                {
+                    command.Parameters.Add("@Username", SqlDbType.VarChar, 255).Value = username;
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            // Retrieve the columns
+                            string db_roles = reader["roles"].ToString();
+                            byte[] db_hashedPassword = (byte[])reader["password"]; ;
+                            byte[] db_salt = (byte[])reader["salt"];
+
+                            return (true, db_salt, db_roles, db_hashedPassword);
+                        }
+                        else
+                        {
+                            return (false, null, null, null);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
