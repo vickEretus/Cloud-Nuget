@@ -2,5 +2,9 @@
 
 internal class Program
 {
-    private static void Main(string[] args) => _ = new UserDB();//ResearchDB ResearchDB = new ResearchDB();
+    private static void Main(string[] args)
+    {
+        var userDB = new UserDB();//ResearchDB ResearchDB = new ResearchDB();
+        userDB.CreateTables();
+    }
 }

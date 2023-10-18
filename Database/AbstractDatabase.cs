@@ -1,16 +1,18 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.SqlServer.Management.Smo;
 
 namespace Database
 {
     public abstract class AbstractDatabase
     {
-        private readonly string ConnectionString;
-        public SqlConnection Connection;
+        protected Server Server;
+        public Microsoft.SqlServer.Management.Smo.Database Database;
 
         public AbstractDatabase(string databaseName)
         {
-            ConnectionString = $"Server=localhost;database={databaseName};Integrated Security=True;";
-            Connection = new SqlConnection(ConnectionString);
+            Server = new Server();
+            Database = Server.Databases[databaseName];
         }
+
+
     }
 }
