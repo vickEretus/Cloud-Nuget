@@ -1,6 +1,5 @@
 ﻿using Common.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -74,13 +73,13 @@ public abstract class AbstractTokenStore
 
     public async Task<(bool verified, string? username)> RemoveAndVerifyRefreshToken(byte[] token)
     {
-        (bool exists, string username, DateTime? expiration) removed = await RemoveRefreshToken(token);
+        (bool exists, string username, DateTime? expiration) = await RemoveRefreshToken(token);
 
-        if (removed.exists)
+        if (exists)
         {
-            if (removed.expiration >= DateTime.UtcNow.Add(ClockSkew))
+            if (expiration >= DateTime.UtcNow.Add(ClockSkew))
             {
-                return (true, removed.username);
+                return (true, username);
             }
         }
 

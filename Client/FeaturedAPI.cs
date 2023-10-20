@@ -13,7 +13,7 @@ public class FeaturedAPI : APIConnection
     /// Refresh token used to request new JWT
     /// </summary>
     public byte[]? RefreshToken = null;
-    
+
     public FeaturedAPI(string baseUrl) : base(baseUrl) { }
 
     /// <summary>

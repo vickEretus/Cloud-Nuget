@@ -1,7 +1,6 @@
 ﻿using Common.POCOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace Server.Controllers;
 // Authorize Refresh Register
@@ -31,14 +30,14 @@ public class UserController : AbstractFeaturedController
     [HttpPost("Refresh", Name = "Refresh")]
     public async Task<IActionResult> Refresh([FromBody] ByteArrayToken refreshToken)
     {
-        (bool valid, string? username) removed = await ServerState.TokenStore.RemoveAndVerifyRefreshToken(refreshToken.Token);
+        (bool valid, string? username) = await ServerState.TokenStore.RemoveAndVerifyRefreshToken(refreshToken.Token);
 
-        if (removed.valid && removed.username != null)
+        if (valid && username != null)
         {
-            (bool success, string[]? roles) = await ServerState.UserStore.GetRoles(removed.username);
+            (bool success, string[]? roles) = await ServerState.UserStore.GetRoles(username);
             if (success)
             {
-                (string authorization, byte[] refresh) = await ServerState.TokenStore.GenerateTokenSet(removed.username, roles ?? Array.Empty<string>());
+                (string authorization, byte[] refresh) = await ServerState.TokenStore.GenerateTokenSet(username, roles ?? Array.Empty<string>());
                 return Ok(new DualToken(authorization, refresh));
             }
             else
@@ -80,5 +79,5 @@ public class UserController : AbstractFeaturedController
 
     [Authorize]
     [HttpPost("Unregister", Name = "Unregister")]
-    public async Task<IActionResult> Unregister([FromBody] UserIdentification userIdentification) => throw new NotImplementedException();
+    public IActionResult Unregister([FromBody] UserIdentification userIdentification) => throw new NotImplementedException();
 }
