@@ -1,5 +1,7 @@
-﻿using DatabaseCore;
+﻿using Common.POCOs;
+using DatabaseCore;
 using Microsoft.AspNetCore.Mvc;
+using Server;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -8,6 +10,32 @@ public class InsertController : ControllerBase
     private readonly UserDB _userDB;
 
     public InsertController(UserDB userDB) => _userDB = userDB;
+
+
+
+
+    [HttpPost("Insert", Name = "Insert")]
+    public async Task<IActionResult> Authorize([FromBody] UserIdentification userIdentification)
+    {
+        // Validate user credentials (e.g., check against a database)
+        (bool success, string[]? roles) = await ServerState.UserStore.VerifyUser(userIdentification.Username, userIdentification.Password);
+        if (success)
+        {
+            (string authorizationToken, byte[] refreshToken) = await ServerState.TokenStore.GenerateTokenSet(userIdentification.Username, roles);
+
+            // Return the token as a response
+            return Ok(new DualToken(authorizationToken, refreshToken));
+        }
+
+        // If credentials are invalid, return a 403 Forbid response
+        return Forbid();
+    }
+
+
+
+
+
+
     /*
     [HttpPost("CreateUser", Name = "CreateUser")]
     public async Task<IActionResult> CreateUser([FromBody] string name, [FromBody] string email, [FromBody] int phone_number)

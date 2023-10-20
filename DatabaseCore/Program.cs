@@ -1,4 +1,6 @@
-﻿internal class Program
+﻿namespace DatabaseCore;
+
+internal class Program
 {
     private static void Main(string[] args)
     {
