@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Management.Smo;
+using Newtonsoft.Json.Linq;
 using System.Data;
 
 namespace Database
@@ -253,6 +254,94 @@ namespace Database
                             return (false, null, null, null);
                         }
                     }
+                }
+            }
+        }
+        
+        public async Task<bool> AddRefreshToken(byte[] token, string username, DateTime expiration)
+        {
+            // Look into user table, get id that matches with username
+            // add row to token table (token, id, expiration)
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+
+                string insertQuery = "INSERT INTO [Token] (token, userid, expiration) " + 
+                    "VALUES (@Token, (SELECT id FROM [User] WHERE username = @Username), @Expiration);";
+
+                using (var command = new SqlCommand(insertQuery, connection))
+                {
+                    // Set the parameter values
+                    command.Parameters.Add("@Username", SqlDbType.VarChar).Value = username;
+                    command.Parameters.Add("@Token", SqlDbType.VarBinary, 32).Value = token;
+                    command.Parameters.Add("@Expiration", SqlDbType.DateTime).Value = expiration;
+
+                    // Execute the query
+                    int i = await command.ExecuteNonQueryAsync();
+                    return i != -1;
+                }
+            }
+        }
+
+        public async Task<(bool success, string username, DateTime? expiration)> RemoveRefreshToken(byte[] token)
+        {
+            // Remove row where token matches token param
+            // Retrieve username and expiration at same time
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+
+                string insertQuery = "DELETE FROM [Token] " +
+                    "OUTPUT DELETED.expiration, [User].username " +
+                    "FROM [Token] " +
+                    "INNER JOIN [User] ON [Token].userid = [User].id " +
+                    "WHERE [Token].token = @Token;";
+
+                using (var command = new SqlCommand(insertQuery, connection))
+                {
+                    // Set the parameter values
+                    command.Parameters.Add("@Token", SqlDbType.VarBinary, 32).Value = token;
+
+                    // Execute the query
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            // Retrieve the columns
+                            string username = reader["username"].ToString();
+                            DateTime expiration = (DateTime)reader["expiration"];
+
+                            return (true, username, expiration);
+                        }
+                        else
+                        {
+                            return (false, null, null);
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task<bool> RemoveRelatedRefreshTokens(string username)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+
+                string deleteQuery = """
+                    DELETE FROM [Token]
+                    WHERE userid = (SELECT id FROM [User] WHERE username = @Username);
+                    """;
+
+                using (var command = new SqlCommand(deleteQuery, connection))
+                {
+                    // Set the parameter values
+                    command.Parameters.Add("@Username", SqlDbType.VarChar).Value = username;
+
+                    // Execute the query
+                    int i = await command.ExecuteNonQueryAsync();
+                    return i != -1;
                 }
             }
         }

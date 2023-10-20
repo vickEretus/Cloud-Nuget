@@ -58,42 +58,41 @@ public abstract class AbstractTokenStore
         return tokenHandler.WriteToken(token);
     }
 
-    public string GenerateRefreshToken(string username) => GenerateRefreshToken(username, DefaultRefreshExpiration);
-    public string GenerateRefreshToken(string username, TimeSpan expiration)
+    public async Task<byte[]> GenerateRefreshToken(string username) => await GenerateRefreshToken(username, DefaultRefreshExpiration);
+    public async Task<byte[]> GenerateRefreshToken(string username, TimeSpan expiration)
     {
-        string token = Guid.NewGuid().ToString();
-        _ = StoreRefreshToken(token, username, DateTime.UtcNow.Add(expiration));
+        byte[] token = ServerState.SecurityHandler.GenerateRefreshToken();
+
+        _ = await StoreRefreshToken(token, username, DateTime.UtcNow.Add(expiration));
 
         LogWriter.LogInfo("Generated new refresh token");
 
         return token;
     }
 
-    public (string authorizationToken, string refreshToken) GenerateTokenSet(string username, string[] roles) => (GenerateAuthorizationToken(username, roles), GenerateRefreshToken(username));
+    public async Task<(string authorizationToken, byte[] refreshToken)> GenerateTokenSet(string username, string[] roles) => (GenerateAuthorizationToken(username, roles), await GenerateRefreshToken(username));
 
-    public bool RemoveAndVerifyRefreshToken(string token, [NotNullWhen(true)] out string? username, [NotNullWhen(true)] out string? newRefreshToken)
+    public async Task<(bool verified, string? username)> RemoveAndVerifyRefreshToken(byte[] token)
     {
-        (string token, string username, DateTime expiration)? removed = RemoveRefreshToken(token);
+        (bool exists, string username, DateTime? expiration) removed = await RemoveRefreshToken(token);
 
-        if (removed.HasValue)
+        if (removed.exists)
         {
-            if (removed.Value.expiration <= DateTime.UtcNow.Add(ClockSkew))
+            if (removed.expiration >= DateTime.UtcNow.Add(ClockSkew))
             {
-                username = removed.Value.username;
-                newRefreshToken = GenerateRefreshToken(username);
-                return true;
+                return (true, removed.username);
             }
         }
 
-        username = null;
-        newRefreshToken = null;
-        return false;
+        return (false, null);
     }
 
-    public abstract void RemoveRelatedRefreshTokens(string username);
+    public abstract Task<(bool exists, string username, DateTime? expiration)> RemoveRefreshToken(byte[] token);
 
-    public abstract bool StoreRefreshToken(string token, string username, DateTime expiration);
-    public abstract (string token, string username, DateTime expiration)? RemoveRefreshToken(string token);
+    public abstract Task RemoveRelatedRefreshTokens(string username);
+
+    public abstract Task<bool> StoreRefreshToken(byte[] token, string username, DateTime expiration);
+
     public abstract void BlacklistAuthorizationToken(string jwt);
     public abstract bool IsAuthorizationBlacklisted(string jwt);
 }

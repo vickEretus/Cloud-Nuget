@@ -1,6 +1,7 @@
 ﻿using Common.POCOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Server.Controllers;
 // Authorize Refresh Register
@@ -17,7 +18,7 @@ public class UserController : AbstractFeaturedController
         (bool success, string[]? roles) = await ServerState.UserStore.VerifyUser(userIdentification.Username, userIdentification.Password);
         if (success)
         {
-            (string authorizationToken, string refreshToken) = ServerState.TokenStore.GenerateTokenSet(userIdentification.Username, roles);
+            (string authorizationToken, byte[] refreshToken) = await ServerState.TokenStore.GenerateTokenSet(userIdentification.Username, roles);
 
             // Return the token as a response
             return Ok(new DualToken(authorizationToken, refreshToken));
@@ -28,15 +29,17 @@ public class UserController : AbstractFeaturedController
     }
 
     [HttpPost("Refresh", Name = "Refresh")]
-    public async Task<IActionResult> Refresh([FromBody] SingleToken refreshToken)
+    public async Task<IActionResult> Refresh([FromBody] ByteArrayToken refreshToken)
     {
-        if (ServerState.TokenStore.RemoveAndVerifyRefreshToken(refreshToken.Token, out string? username, out string? newRefreshToken))
+        (bool valid, string? username) removed = await ServerState.TokenStore.RemoveAndVerifyRefreshToken(refreshToken.Token);
+
+        if (removed.valid && removed.username != null)
         {
-            (bool success, string[]? roles) = await ServerState.UserStore.GetRoles(username);
+            (bool success, string[]? roles) = await ServerState.UserStore.GetRoles(removed.username);
             if (success)
             {
-                string newAuthorizationToken = ServerState.TokenStore.GenerateAuthorizationToken(username, roles);
-                return Ok(new DualToken(newAuthorizationToken, newRefreshToken));
+                (string authorization, byte[] refresh) = await ServerState.TokenStore.GenerateTokenSet(removed.username, roles ?? Array.Empty<string>());
+                return Ok(new DualToken(authorization, refresh));
             }
             else
             {
@@ -58,12 +61,12 @@ public class UserController : AbstractFeaturedController
 
     [Authorize]
     [HttpDelete("Logout", Name = "Logout")]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
         string? username = GetUsername();
         if (username != null)
         {
-            ServerState.TokenStore.RemoveRelatedRefreshTokens(username);
+            await ServerState.TokenStore.RemoveRelatedRefreshTokens(username);
         }
 
         string? jwt = GetJWT();
@@ -77,5 +80,5 @@ public class UserController : AbstractFeaturedController
 
     [Authorize]
     [HttpPost("Unregister", Name = "Unregister")]
-    public IActionResult Unregister([FromBody] UserIdentification userIdentification) => throw new NotImplementedException();
+    public async Task<IActionResult> Unregister([FromBody] UserIdentification userIdentification) => throw new NotImplementedException();
 }

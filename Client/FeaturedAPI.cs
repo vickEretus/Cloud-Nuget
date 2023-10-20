@@ -12,8 +12,8 @@ public class FeaturedAPI : APIConnection
     /// <summary>
     /// Refresh token used to request new JWT
     /// </summary>
-    public string? RefreshToken = null;
-
+    public byte[]? RefreshToken = null;
+    
     public FeaturedAPI(string baseUrl) : base(baseUrl) { }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class FeaturedAPI : APIConnection
         else // Refresh token exists
         {
             LogWriter.LogDebug("Attempting to refresh authorization token");
-            APIResponse<DualToken> refresh = await Post<DualToken, SingleToken>("User/Refresh", new SingleToken(RefreshToken));
+            APIResponse<DualToken> refresh = await Post<DualToken, ByteArrayToken>("User/Refresh", new ByteArrayToken(RefreshToken));
             if (refresh.IsValid) // Refreshed token
             {
                 SetAuthJWT(refresh.Result!.TokenA);

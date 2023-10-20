@@ -24,6 +24,8 @@ public class SecurityHandler
         return randomBytes;
     }
 
+    public byte[] GenerateRefreshToken() => GenerateRandomBytes(32);
+
     private SymmetricSecurityKey GenerateSymmetricKey(int length) => new(GenerateRandomBytes(length));
 
     public (byte[] hashed, byte[] salt) SaltHashPassword(string password)
