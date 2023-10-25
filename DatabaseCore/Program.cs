@@ -1,4 +1,5 @@
-﻿namespace DatabaseCore;
+﻿
+namespace DatabaseCore;
 
 internal class Program
 {
@@ -7,7 +8,8 @@ internal class Program
         var userDB = new UserDB();//ResearchDB ResearchDB = new ResearchDB();
         var researchDB = new ResearchDB();
 
-        //researchDB.CreateTables();
+        researchDB.Kill();
+        researchDB.CreateTables();
         //researchDB.AddShot(null, default, null, 0, 0, 0);
 
         // userDB.Kill();

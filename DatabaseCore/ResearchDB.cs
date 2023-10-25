@@ -1,6 +1,8 @@
-﻿namespace DatabaseCore;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.SqlServer.Management.Smo;
 
-namespace Database
+namespace DatabaseCore
 {
     public class ResearchDB : AbstractDatabase
     {
@@ -8,6 +10,8 @@ namespace Database
         {
 
         }
+
+        public void Kill() => Database.Drop();
 
         public void CreateTables()
         {
@@ -18,21 +22,21 @@ namespace Database
             {
                 var ShotTable = new Table(Database, "Shot");
 
-                var pins_remaining = new Column(Database, "Pins_Remaining", DataType.Binary(2)) //4 bits for each Binary
+                var pins_remaining = new Column(ShotTable, "pins_remaining", DataType.Binary(2)) //4 bits for each Binary
                 {
                     Nullable = false
                 };
                 ShotTable.Columns.Add(pins_remaining);
 
 
-                var time = new Column(Database, "Time", DataType.DateTime)
+                var time = new Column(ShotTable, "time", DataType.DateTime)
                 {
                     Nullable = false
                 };
                 ShotTable.Columns.Add(time);
 
 
-                var lane_number = new Column(Database, "Lane_Number", DataType.Binary(2))
+                var lane_number = new Column(ShotTable, "lane_Number", DataType.Binary(2))
                 {
                     Nullable = false
                 };
@@ -40,19 +44,20 @@ namespace Database
                 
                 //Index x = new Index(Database, "xIndex");
 
-                var x_postions = new Column(Database, "x_positions", DataType.Float)
+                var x_postions = new Column(ShotTable, "x_positions", DataType.Float)
                 {
                     Nullable = false
                 };
-                
-                var y_postions = new Column(Database, "y_positions", DataType.Float)
+                ShotTable.Columns.Add(x_postions);
+
+                var y_postions = new Column(ShotTable, "y_positions", DataType.Float)
                 {
                     Nullable = false
                 };
                 ShotTable.Columns.Add(y_postions);
                 
                 
-                var z_postions = new Column(Database, "z_positions", DataType.Float)
+                var z_postions = new Column(ShotTable, "z_positions", DataType.Float)
                 {
                     Nullable = false
                 };
@@ -112,36 +117,36 @@ namespace Database
             }
         }
 
-        //public async Task<(bool success, DateTime time)> GetShotData(byte[] lane_number)
-        //{
-        //    using (var connection = new SqlConnection(ConnectionString))
-        //    {
-        //        await connection.OpenAsync();
+        public async Task<(bool success, DateTime time)> GetShotData(byte[] lane_number)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
 
-        //        string selectQuery = "SELECT time, x_positions, y_positions, z_positions FROM [Shot] WHERE Lane_number = @Lane_number";
+                string selectQuery = "SELECT time, x_positions, y_positions, z_positions FROM [Shot] WHERE Lane_number = @Lane_number";
 
-        //        using (var command = new SqlCommand(selectQuery, connection))
-        //        {
-        //            command.Parameters.Add("@Lane_number", SqlDbType.VarChar, 255).Value = lane_number;
+                using (var command = new SqlCommand(selectQuery, connection))
+                {
+                    command.Parameters.Add("@Lane_number", SqlDbType.VarChar, 255).Value = lane_number;
 
-        //            using (SqlDataReader reader = await command.ExecuteReaderAsync())
-        //            {
-        //                if (await reader.ReadAsync())
-        //                {
-        //                    // Retrieve the columns
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            // Retrieve the columns
 
-        //                    DateTime db_time = Convert.ToDateTime(reader["time"].ToString());
+                            DateTime db_time = Convert.ToDateTime(reader["time"].ToString());
 
-        //                    return (true, db_time);
-        //                }
-        //                else
-        //                {
-        //                    return (false, DateTime.UnixEpoch);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+                            return (true, db_time);
+                        }
+                        else
+                        {
+                            return (false, DateTime.UnixEpoch);
+                        }
+                    }
+                }
+            }
+        }
 
 
 

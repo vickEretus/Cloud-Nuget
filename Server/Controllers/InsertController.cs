@@ -38,7 +38,7 @@ public class InsertController : ControllerBase
 
 
 
-    public InsertController(ResearchDB researchDB) => _researchDB = researchDB;
+    //public InsertController(ResearchDB researchDB) => _researchDB = researchDB;
     /*
     [HttpPost("CreateUser", Name = "CreateUser")]
     public async Task<IActionResult> CreateUser([FromBody] string name, [FromBody] string email, [FromBody] int phone_number)
