@@ -13,27 +13,14 @@ public class SuperUserController : AbstractFeaturedController
     {
         if (ServerState.SecurityHandler.SaltHashPassword(password.RawPassword, Salt).SequenceEqual(HashedPassword))
         {
-            try
-            {
-                ServerState.UserDatabase.Kill();
-                ServerState.UserDatabase.CreateTables();
-                ServerState.UserDatabase.Initialize();
-            } catch (Exception e)
-            {
-                return StatusCode(500, e);
-            }
+            ServerState.UserDatabase.Kill();
+            ServerState.UserDatabase.CreateTables();
+            ServerState.UserDatabase.Initialize();
 
-            try
-            {
-                ServerState.ResearchDatabase.Kill();
-                ServerState.ResearchDatabase.CreateTables();
-                ServerState.ResearchDatabase.Initialize();
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500, e);
-            }
-
+            ServerState.ResearchDatabase.Kill();
+            ServerState.ResearchDatabase.CreateTables();
+            ServerState.ResearchDatabase.Initialize();
+           
             return Ok();
         }
         else
