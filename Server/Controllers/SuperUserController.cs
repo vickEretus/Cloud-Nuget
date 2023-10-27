@@ -16,21 +16,22 @@ public class SuperUserController : AbstractFeaturedController
             try
             {
                 ServerState.UserDatabase.Kill();
-            }
-            finally
-            {
                 ServerState.UserDatabase.CreateTables();
                 ServerState.UserDatabase.Initialize();
+            } catch (Exception e)
+            {
+                return StatusCode(500, e);
             }
 
             try
             {
                 ServerState.ResearchDatabase.Kill();
-            }
-            finally
-            {
                 ServerState.ResearchDatabase.CreateTables();
                 ServerState.ResearchDatabase.Initialize();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
             }
 
             return Ok();
