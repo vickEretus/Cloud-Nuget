@@ -123,7 +123,7 @@ public class UserDB : AbstractDatabase
         }
     }
 
-    public void Kill() => Database.Drop();
+    public void Kill() => Database?.DropIfExists();
 
     public async Task<bool> AddUser(string username, byte[] hashedPassword, byte[] salt, string roles, string phone, string email)
     {

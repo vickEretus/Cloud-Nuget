@@ -11,7 +11,7 @@ namespace DatabaseCore
 
         }
 
-        public void Kill() => Database.Drop();
+        public void Kill() => Database?.DropIfExists();
 
         public void CreateTables()
         {

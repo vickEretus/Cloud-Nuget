@@ -18,7 +18,7 @@ public abstract class AbstractDatabase
         string? DockerizedEnviron = Environment.GetEnvironmentVariable("DOCKERIZED");
         if (DockerizedEnviron == null) // Variable not set
         {
-            ConnectionString = $"Data Source=localhost;database={databaseName};IntegratedSecurity=True;TrustServerCertificate=True;";
+            ConnectionString = $"Data Source=localhost;database={databaseName};Integrated Security=True;TrustServerCertificate=True;";
         }
         else if (DockerizedEnviron == "Dockerized") // Is dockerized
         {
@@ -26,14 +26,19 @@ public abstract class AbstractDatabase
         }
         else // Fallback
         {
-            ConnectionString = $"Data Source=localhost;database={databaseName};IntegratedSecurity=True;TrustServerCertificate=True;";
+            ConnectionString = $"Data Source=localhost;database={databaseName};Integrated Security=True;TrustServerCertificate=True;";
         }
 
         LogWriter.LogInfo($"DB Connection: {ConnectionString}");
 
         DatabaseName = databaseName;
+        Initialize();
+    }
+
+    public void Initialize()
+    {
         Server = new Server(new ServerConnection(new SqlConnection(ConnectionString)));
-        Database = Server.Databases[databaseName];
+        Database = Server.Databases[DatabaseName];
     }
 
 }
