@@ -100,7 +100,8 @@ public class FeaturedAPI : APIConnection
             RefreshToken = null;
             SetAuthJWT("");
             return true;
-        } else
+        }
+        else
         {
             return false;
         }

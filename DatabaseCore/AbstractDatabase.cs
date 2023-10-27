@@ -16,18 +16,11 @@ public abstract class AbstractDatabase
     {
         // Get DOCKERIZED environment variable
         string? DockerizedEnviron = Environment.GetEnvironmentVariable("DOCKERIZED");
-        if (DockerizedEnviron == null) // Variable not set
-        {
-            ConnectionString = $"Data Source=localhost;database={databaseName};Integrated Security=True;TrustServerCertificate=True;";
-        }
-        else if (DockerizedEnviron == "Dockerized") // Is dockerized
-        {
-            ConnectionString = $"Server=sql_server;database={databaseName};User Id=SA;Password=BigPass@Word!;TrustServerCertificate=True;";
-        }
-        else // Fallback
-        {
-            ConnectionString = $"Data Source=localhost;database={databaseName};Integrated Security=True;TrustServerCertificate=True;";
-        }
+        ConnectionString = DockerizedEnviron == null
+            ? $"Data Source=localhost;database={databaseName};Integrated Security=True;TrustServerCertificate=True;"
+            : DockerizedEnviron == "Dockerized"
+                ? $"Server=sql_server;database={databaseName};User Id=SA;Password=BigPass@Word!;TrustServerCertificate=True;"
+                : $"Data Source=localhost;database={databaseName};Integrated Security=True;TrustServerCertificate=True;";
 
         LogWriter.LogInfo($"DB Connection: {ConnectionString}");
 

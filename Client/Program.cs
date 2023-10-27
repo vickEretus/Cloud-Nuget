@@ -12,11 +12,11 @@ internal class Program
     {
         LogWriter.OutputLevel = Common.Logging.LogLevel.DEBUG;
 
-        await Connection.Login("testies", "J0rd@n");
+        _ = await Connection.Login("testies", "J0rd@n");
 
         Thread.Sleep(1000);
 
-        await Connection.Logout();
+        _ = await Connection.Logout();
 
         Thread.Sleep(1000);
     }

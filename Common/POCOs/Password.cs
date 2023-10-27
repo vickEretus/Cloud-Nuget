@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Common.POCOs;
+﻿namespace Common.POCOs;
 public class Password : POCO
 {
     public string RawPassword { set; get; }

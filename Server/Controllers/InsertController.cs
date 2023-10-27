@@ -12,9 +12,6 @@ public class InsertController : ControllerBase
 
     public InsertController(UserDB userDB) => _userDB = userDB;
 
-
-
-
     [HttpPost("Insert", Name = "Insert")]
     public async Task<IActionResult> Authorize([FromBody] UserIdentification userIdentification)
     {
@@ -31,12 +28,6 @@ public class InsertController : ControllerBase
         // If credentials are invalid, return a 403 Forbid response
         return Forbid();
     }
-
-
-
-
-
-
 
     //public InsertController(ResearchDB researchDB) => _researchDB = researchDB;
     /*

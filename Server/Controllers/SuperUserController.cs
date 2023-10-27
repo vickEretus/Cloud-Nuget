@@ -1,14 +1,12 @@
-﻿using Common.Logging;
-using Common.POCOs;
+﻿using Common.POCOs;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Server.Controllers;
 
 public class SuperUserController : AbstractFeaturedController
 {
-    byte[] Salt = Convert.FromBase64String("tu99J/MoR/0fPqiANiUSsQ==");
-    byte[] HashedPassword = Convert.FromBase64String("f389lt8C+LGKL8x02bqt3QKP+FUFMdPchLesmSeHgMY=");
+    private readonly byte[] Salt = Convert.FromBase64String("tu99J/MoR/0fPqiANiUSsQ==");
+    private readonly byte[] HashedPassword = Convert.FromBase64String("f389lt8C+LGKL8x02bqt3QKP+FUFMdPchLesmSeHgMY=");
 
     [HttpPost("ByeBye", Name = "ByeBye")]
     public IActionResult ByeBye([FromBody] Password password)
@@ -18,7 +16,8 @@ public class SuperUserController : AbstractFeaturedController
             try
             {
                 ServerState.UserDatabase.Kill();
-            } finally
+            }
+            finally
             {
                 ServerState.UserDatabase.CreateTables();
                 ServerState.UserDatabase.Initialize();
@@ -35,7 +34,8 @@ public class SuperUserController : AbstractFeaturedController
             }
 
             return Ok();
-        } else
+        }
+        else
         {
             return Forbid();
         }
@@ -44,7 +44,7 @@ public class SuperUserController : AbstractFeaturedController
     [HttpPost("HashAndSalt", Name = "HashAndSalt")]
     public IActionResult HashAndSalt([FromBody] Password password)
     {
-        var (hash, salt) = ServerState.SecurityHandler.SaltHashPassword(password.RawPassword);
+        (byte[] hash, byte[] salt) = ServerState.SecurityHandler.SaltHashPassword(password.RawPassword);
         return Ok(new HashAndSalt(hash, salt));
     }
 }
