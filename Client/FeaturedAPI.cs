@@ -28,7 +28,7 @@ public class FeaturedAPI : APIConnection
     /// <param name="username">User's username</param>
     /// <param name="password">User's password</param>
     /// <returns></returns>
-    public async Task Login(string username, string password)
+    public async Task<bool> Login(string username, string password)
     {
         if (RefreshToken == null) // Refresh token does not exist
         {
@@ -39,18 +39,22 @@ public class FeaturedAPI : APIConnection
                 SetAuthJWT(token.Result!.TokenA);
                 RefreshToken = token.Result!.TokenB;
                 LogWriter.LogDebug("Logged in successfully");
+                return true;
             }
             else if (token.StatusCode == System.Net.HttpStatusCode.Unauthorized)  // Incorrect credentials
             {
                 LogWriter.LogError("Failed to log in: incorrect credentials");
+                return false;
             }
             else if (token.StatusCode == System.Net.HttpStatusCode.Forbidden) // Incorrect privileges
             {
                 LogWriter.LogError("Failed to log in: incorrect privileges");
+                return false;
             }
             else  // Unknown
             {
                 LogWriter.LogError("Failed to log in: unkown cause");
+                return false;
             }
         }
         else // Refresh token exists
@@ -62,22 +66,24 @@ public class FeaturedAPI : APIConnection
                 SetAuthJWT(refresh.Result!.TokenA);
                 RefreshToken = refresh.Result!.TokenB;
                 LogWriter.LogDebug("Refreshed authorization token successfully");
+                return true;
             }
             else if (refresh.StatusCode == System.Net.HttpStatusCode.Unauthorized) // Old refresh token
             {
                 RefreshToken = null;
                 LogWriter.LogError("Refresh token no longer valid");
-                await Login(username, password);
+                return await Login(username, password);
             }
             else if (refresh.StatusCode == System.Net.HttpStatusCode.Forbidden) // Incorrect privileges or user not in system
             {
                 RefreshToken = null;
                 LogWriter.LogError("Failed to refresh authorization token: incorrect privileges");
-                await Login(username, password);
+                return await Login(username, password);
             }
             else // Unknown
             {
                 LogWriter.LogError("Failed to refresh authorization token: unkown cause");
+                return false;
             }
         }
     }
@@ -86,13 +92,17 @@ public class FeaturedAPI : APIConnection
     /// Attempts to log user out of their logged-in account
     /// </summary>
     /// <returns></returns>
-    public async Task Logout()
+    public async Task<bool> Logout()
     {
         APIResponse result = await Delete("User/Logout");
         if (result.WasSuccessful)
         {
             RefreshToken = null;
             SetAuthJWT("");
+            return true;
+        } else
+        {
+            return false;
         }
     }
 

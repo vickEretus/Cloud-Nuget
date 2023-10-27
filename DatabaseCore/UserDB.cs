@@ -6,31 +6,6 @@ namespace DatabaseCore;
 
 public class UserDB : AbstractDatabase
 {
-    /*
-    using (var connection = new SqlConnection(ServerState.UserDatabase.ConnectionString))
-    {
-        connection.Open();
-
-        string insertQuery = "INSERT INTO [User] (username, salt, roles, password, email, phone) " +
-                             "VALUES (@Username, @Salt, @Roles, @Password, @Email, @Phone)";
-
-        using (SqlCommand command = new SqlCommand(insertQuery, connection))
-        {
-            // Set the parameter values
-            command.Parameters.Add("@Username", SqlDbType.VarChar).Value = "JohnHoe";
-            command.Parameters.Add("@Salt", SqlDbType.VarBinary, 16).Value = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-            command.Parameters.Add("@Roles", SqlDbType.VarChar).Value = "User";
-            command.Parameters.Add("@Password", SqlDbType.VarBinary, -1).Value = new byte[] { 0xAB, 0xCD, 0xEF, 0x12, 0x34, 0x56, 0x78, 0x90 };
-            command.Parameters.Add("@Email", SqlDbType.VarChar).Value = "john.doe@email.com";
-            command.Parameters.Add("@Phone", SqlDbType.VarChar).Value = "123-456-7890";
-
-            // Execute the query
-            int i = command.ExecuteNonQuery();
-            Console.WriteLine(i);
-        }
-    }
-     */
-
     public UserDB() : base("revmetrix-u")
     {
 

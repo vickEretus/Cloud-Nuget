@@ -1,5 +1,4 @@
-﻿
-namespace DatabaseCore;
+﻿namespace DatabaseCore;
 
 internal class Program
 {
@@ -10,9 +9,8 @@ internal class Program
 
         researchDB.Kill();
         researchDB.CreateTables();
-        //researchDB.AddShot(null, default, null, 0, 0, 0);
 
-        // userDB.Kill();
-        // userDB.CreateTables();
+        userDB.Kill();
+        userDB.CreateTables();
     }
 }

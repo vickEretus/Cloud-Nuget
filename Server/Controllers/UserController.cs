@@ -1,4 +1,5 @@
-﻿using Common.POCOs;
+﻿using Common.Logging;
+using Common.POCOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ public class UserController : AbstractFeaturedController
     [HttpPost("Authorize", Name = "Authorize")]
     public async Task<IActionResult> Authorize([FromBody] UserIdentification userIdentification)
     {
+        LogWriter.LogInfo("Authorize called");
         // Validate user credentials (e.g., check against a database)
         (bool success, string[]? roles) = await ServerState.UserStore.VerifyUser(userIdentification.Username, userIdentification.Password);
         if (success)
@@ -30,6 +32,7 @@ public class UserController : AbstractFeaturedController
     [HttpPost("Refresh", Name = "Refresh")]
     public async Task<IActionResult> Refresh([FromBody] ByteArrayToken refreshToken)
     {
+        LogWriter.LogInfo("Refresh called");
         (bool valid, string? username) = await ServerState.TokenStore.RemoveAndVerifyRefreshToken(refreshToken.Token);
 
         if (valid && username != null)
@@ -53,6 +56,7 @@ public class UserController : AbstractFeaturedController
     [HttpPost("Register", Name = "Register")]
     public async Task<IActionResult> Register([FromBody] UserIdentification userIdentification)
     {
+        LogWriter.LogInfo("Register called");
         bool result = await ServerState.UserStore.CreateUser(userIdentification.Username, userIdentification.Password, new string[] { "user" });
 
         return result ? await Authorize(userIdentification) : Conflict();
@@ -62,6 +66,7 @@ public class UserController : AbstractFeaturedController
     [HttpDelete("Logout", Name = "Logout")]
     public async Task<IActionResult> Logout()
     {
+        LogWriter.LogInfo("Logout called");
         string? username = GetUsername();
         if (username != null)
         {
