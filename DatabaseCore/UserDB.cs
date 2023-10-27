@@ -14,7 +14,19 @@ public class UserDB : AbstractDatabase
     public void CreateTables()
     {
         Database = new Microsoft.SqlServer.Management.Smo.Database(Server, DatabaseName);
-        Database.Create();
+
+        // Check to see if the database is in the server
+        // If not create the database and then create the tables
+        if (!Server.Databases.Contains(DatabaseName))
+        {
+            Database.Create();
+        }
+        // Otherwise breakout of createTables
+        else
+        {
+            return;
+        }
+        
 
         // User Table
         {
@@ -123,9 +135,40 @@ public class UserDB : AbstractDatabase
         }
     }
 
-    public void Kill() => Database?.DropIfExists();
+    public async Task Kill() {
+        //Database?.DropIfExists(); 
+            using var connection = new SqlConnection(ConnectionString);
+            await connection.OpenAsync();
+            string noConstraint = "Use [revmetrix-u] ALTER TABLE [User] NOCHECK CONSTRAINT all";
+            using var command = new SqlCommand(noConstraint, connection);
+            command.ExecuteNonQuery();
 
-    public async Task<bool> AddUser(string username, byte[] hashedPassword, byte[] salt, string roles, string phone, string email)
+
+            //using var connection2 = new SqlConnection(ConnectionString);
+            //connection2.OpenAsync();
+            string dropUser = "DROP TABLE [User]";
+            using var command2 = new SqlCommand(dropUser, connection);
+            command2.ExecuteNonQuery();
+
+            //using var connection3 = new SqlConnection(ConnectionString);
+            //connection3.OpenAsync();
+            string dropShot = "DROP TABLE [Shot]";
+            using var command3 = new SqlCommand(dropShot, connection);
+            command3.ExecuteNonQuery();
+
+            /*
+            USE[dbname]
+                GO
+                EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'
+                EXEC sp_msforeachtable 'DELETE ?'
+            */
+
+
+
+
+        }
+
+        public async Task<bool> AddUser(string username, byte[] hashedPassword, byte[] salt, string roles, string phone, string email)
     {
         using var connection = new SqlConnection(ConnectionString);
         await connection.OpenAsync();
