@@ -14,7 +14,11 @@ public class SuperUserController : AbstractFeaturedController
         if (ServerState.SecurityHandler.SaltHashPassword(password.RawPassword, Salt).SequenceEqual(HashedPassword))
         {
             ServerState.UserDatabase.Kill();
-            ServerState.UserDatabase.CreateTables();
+            if (!ServerState.UserDatabase.DoesExist())
+            {
+                ServerState.UserDatabase.CreateTables();
+            }
+            
 
             ServerState.ResearchDatabase.Kill();
             ServerState.ResearchDatabase.CreateTables();

@@ -383,4 +383,20 @@ public class UserDB : AbstractDatabase
         int i = await command.ExecuteNonQueryAsync();
         return i != -1;
     }
+
+
+    public bool DoesExist()
+    {
+        Database = new Microsoft.SqlServer.Management.Smo.Database(Server, DatabaseName);
+        if (!Server.Databases.Contains(DatabaseName))
+        {
+            return true;
+        }
+        // Otherwise breakout of createTables
+        else
+        {
+            return false;
+        }
+    }
+
 }
