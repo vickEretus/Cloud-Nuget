@@ -20,8 +20,8 @@ public class SuperUserController : AbstractFeaturedController
             }
             
 
-            ServerState.ResearchDatabase.Kill();
-            ServerState.ResearchDatabase.CreateTables();
+            // ServerState.ResearchDatabase.Kill();
+            // ServerState.ResearchDatabase.CreateTables();
 
            
             return Ok();
