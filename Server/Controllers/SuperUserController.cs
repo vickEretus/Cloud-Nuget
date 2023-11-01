@@ -15,11 +15,10 @@ public class SuperUserController : AbstractFeaturedController
         {
             ServerState.UserDatabase.Kill();
             ServerState.UserDatabase.CreateTables();
-            ServerState.UserDatabase.Initialize();
 
             ServerState.ResearchDatabase.Kill();
             ServerState.ResearchDatabase.CreateTables();
-            ServerState.ResearchDatabase.Initialize();
+
            
             return Ok();
         }
