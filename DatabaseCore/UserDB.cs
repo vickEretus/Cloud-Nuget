@@ -136,7 +136,7 @@ public class UserDB : AbstractDatabase
     }
 
     public async Task Kill() {
-        //Database?.DropIfExists(); 
+
             using var connection = new SqlConnection(ConnectionString);
             await connection.OpenAsync();
             string noConstraint = "Use [revmetrix-u] ALTER TABLE [User] NOCHECK CONSTRAINT all";
@@ -155,16 +155,6 @@ public class UserDB : AbstractDatabase
             string dropShot = "DROP TABLE [Shot]";
             using var command3 = new SqlCommand(dropShot, connection);
             command3.ExecuteNonQuery();
-
-            /*
-            USE[dbname]
-                GO
-                EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'
-                EXEC sp_msforeachtable 'DELETE ?'
-            */
-
-
-
 
         }
 
