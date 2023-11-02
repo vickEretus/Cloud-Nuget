@@ -15,16 +15,32 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
+      
     - name: Restore dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build --no-restore
+      
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Generate OpenAPI document
+      run: dotnet swagger tofile --output ./swagger.json ./bin/Debug/net7.0/Server.dll v1
+
+    - name: Upload OpenAPI document
+      uses: actions/upload-artifact@v3
+      with:
+        name: OpenAPI
+        path: ./swagger.json
 
   docker:
     name: Publish - Docker Hub
@@ -38,6 +54,7 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USER }} 
              -p '${{ secrets.DOCKER_PASS }}'
+             
       - name: Build Docker image
         run: |
           echo "REPO - $REPO"
