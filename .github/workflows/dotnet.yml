@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -21,26 +18,26 @@ jobs:
       with:
         dotnet-version: 7.0.x
       
+    - name: Install Swashbuckle CLI
+      run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version 6.5.0
+      
     - name: Restore dependencies
       run: dotnet restore
       
     - name: Build
       run: dotnet build --no-restore
       
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      
-    - name: Build
-      run: dotnet build --no-restore
-
     - name: Generate OpenAPI document
-      run: dotnet swagger tofile --output ./swagger.json ./bin/Debug/net7.0/Server.dll v1
+      run: ~/.dotnet/tools/dotnet-swagger tofile --output ./swagger.json ./WebApi/Server/bin/Debug/net7.0/Server.dll v1
 
     - name: Upload OpenAPI document
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: OpenAPI
         path: ./swagger.json
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
 
   docker:
     name: Publish - Docker Hub
@@ -95,4 +92,3 @@ jobs:
           echo "Endpoint returned $response"
           exit 1
         fi
-  
