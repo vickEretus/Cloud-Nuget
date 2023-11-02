@@ -28,7 +28,7 @@ jobs:
       run: dotnet build --no-restore
       
     - name: Generate OpenAPI document
-      run: ~/.dotnet/tools/swagger tofile --output ./swagger.json ./WebApi/Server/bin/Debug/net7.0/Server.dll v1
+      run: ~/.dotnet/tools/swagger tofile --output ./swagger.json ./Server/bin/Debug/net7.0/Server.dll v1
 
     - name: Upload OpenAPI document
       uses: actions/upload-artifact@v2
