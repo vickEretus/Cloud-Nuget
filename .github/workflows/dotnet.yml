@@ -7,37 +7,33 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
-    
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-      
-    - name: Install Swashbuckle CLI
-      run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version 6.5.0
-      
     - name: Restore dependencies
       run: dotnet restore
-      
     - name: Build
       run: dotnet build --no-restore
-      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  generate-swagger:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+    - name: Install Swashbuckle CLI
+      run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version 6.5.0
     - name: Generate OpenAPI document
       run: ~/.dotnet/tools/swagger tofile --output ./swagger.json ./Server/bin/Debug/net7.0/Server.dll v1
-
     - name: Upload OpenAPI document
       uses: actions/upload-artifact@v2
       with:
         name: OpenAPI
         path: ./swagger.json
-      
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
 
   docker:
     name: Publish - Docker Hub
@@ -51,7 +47,6 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USER }} 
              -p '${{ secrets.DOCKER_PASS }}'
-             
       - name: Build Docker image
         run: |
           echo "REPO - $REPO"
@@ -64,7 +59,6 @@ jobs:
     name: Redeploy webhook call
     runs-on: ubuntu-latest
     needs: [docker]
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'
     steps:
       - name: Deploy docker container webhook
         uses: joelwmale/webhook-action@master
@@ -72,11 +66,11 @@ jobs:
           WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL  }}
 
   delay:
-      runs-on: ubuntu-latest
-      needs: [redeploy]
-      steps:
-      - name: Wait for 1 minute
-        run: sleep 60
+    runs-on: ubuntu-latest
+    needs: [redeploy]
+    steps:
+    - name: Wait for 1 minute
+      run: sleep 60
 
   test-endpoint:
     runs-on: ubuntu-latest
