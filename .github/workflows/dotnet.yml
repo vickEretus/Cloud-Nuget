@@ -18,6 +18,11 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: ./Server/bin/Debug/net7.0/
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
@@ -27,8 +32,11 @@ jobs:
     steps:
     - name: Install Swashbuckle CLI
       run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version 6.5.0
-    - name: List files in directory
-      run: ls ./Server/bin/Debug/net7.0/
+    - name: Download build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifacts
+        path: ./Server/bin/Debug/net7.0/
     - name: Generate OpenAPI document
       run: ~/.dotnet/tools/swagger tofile --output ./swagger.json ./Server/bin/Debug/net7.0/Server.dll v1
     - name: Upload OpenAPI document
