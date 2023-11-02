@@ -26,6 +26,9 @@ jobs:
       
     - name: Build
       run: dotnet build --no-restore
+
+    - name: List installed .NET tools
+      run: ls ~/.dotnet/tools/
       
     - name: Generate OpenAPI document
       run: ~/.dotnet/tools/dotnet-swagger tofile --output ./swagger.json ./WebApi/Server/bin/Debug/net7.0/Server.dll v1
