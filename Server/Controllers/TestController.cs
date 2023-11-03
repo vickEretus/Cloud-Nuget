@@ -24,6 +24,15 @@ public class TestController : AbstractFeaturedController
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
+    [HttpGet("TestAuthenticateAdmin", Name = "TestAuthenticateAdmin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult TestAuthenticateAdmin()
+    {
+        LogWriter.LogInfo("TestAuthenticateAdmin called");
+        return Ok();
+    }
+
     [HttpGet("TestTime", Name = "TestTime")]
     public IActionResult TestTime()
     {
