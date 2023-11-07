@@ -55,20 +55,24 @@ jobs:
           ls -l Client/Client.csproj
           git status
         shell: bash
-
+        
+      - name: Commit Changes
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add $csproj_file
+          git commit -m "Auto-increment version"
+        shell: bash
+        
       - name: Check for Changes
         id: check_changes
         run: |
           git diff --exit-code || exit 0
         shell: bash
 
-      - name: Commit and Push Changes
+      - name: Push Changes
         if: steps.check_changes.outputs.return-code == '0'
         run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add $csproj_file
-          git commit -m "Auto-increment version"
           git push
         shell: bash
 
