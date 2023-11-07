@@ -1,30 +1,35 @@
-name: Publish Client to NuGet
+name: Release to Nuget
 
 on:
-  push:
-    branches:
-      - main  # You can specify the branch you want to trigger this on
+  release:
+    types: [published]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 7.0.x  # Specify your .NET version
+        dotnet-version: 7.0.0
 
-    - name: Restore and Build
-      run: dotnet build ./WebApi/Client/Client.csproj --configuration Release
 
-    - name: Publish to NuGet
-      run: dotnet pack ./WebApi/Client/Client.csproj --configuration Release
-      continue-on-error: true
-
-    - name: Publish NuGet Package
-      if: success()
-      run: dotnet nuget push ./WebApi/Client/bin/Release/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+    - name: Create NuGet Package
+      run: dotnet pack -c Release /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/Cloud-Infrastructure/Client/releases/tag/${{ github.event.release.tag_name }}"
+      working-directory: ./Cloud-Infrastructure      
+    - name: Archive NuGet Package
+      uses: actions/upload-artifact@v1
+      with:
+        name: Client
+        path: ./Cloud-Infrastructure/Client/bin/Release/Client.1.0.0.nupkg
+        #./AspNetMonsters.ApplicationInsights/AspNetMonsters.ApplicationInsights.AspNetCore/bin/Release/AspNetMonsters.ApplicationInsights.AspNetCore.${{ github.event.release.tag_name }}.nupkg
+    #- name: Archive NuGet Package
+    #  uses: actions/upload-artifact@v1
+    # with:
+    #    name: AspNetMonsters.ApplicationInsights
+    #    path: ./AspNetMonsters.ApplicationInsights/AspNetMonsters.ApplicationInsights/bin/Release/AspNetMonsters.ApplicationInsights.${{ github.event.release.tag_name }}.nupkg
+    - name: Publish Nuget Package
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.TEST_TEST_TEST }} --source https://api.nuget.org/v3/index.json --no-symbols true
