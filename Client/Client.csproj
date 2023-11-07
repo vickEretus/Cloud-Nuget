@@ -1,9 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+	  <OutputType>Exe</OutputType>
+	  <TargetFramework>net7.0</TargetFramework>
+	  <PackageId>Client</PackageId>
+	  <Version>1.0.0</Version>
+	  <Authors>Braden Fleming,Jordan Carvell,Victor Pineda,Robert Wood</Authors>
+	  <Company>YCP RevMetrix</Company>
+	  <PackageDescription>Internal use for the RevMetrix Team's Sim and App Team, duh</PackageDescription>
+	  <RepositoryUrl>https://github.com/vickEretus/TestNuget</RepositoryUrl>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
