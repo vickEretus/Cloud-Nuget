@@ -21,9 +21,7 @@ jobs:
     - name: Create NuGet Package
       run: dotnet pack -c Release # /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/Cloud-Infrastructure/Client/releases/tag/${{ github.event.release.tag_name }}"
       working-directory: ./Client #./Cloud-Infrastructure      
-    - name: Update NuGet Package
-      run: dotnet nuget push # /p:Version=${{ github.event.release.tag_name }} /p:PackageReleaseNotes="See https://github.com/Cloud-Infrastructure/Client/releases/tag/${{ github.event.release.tag_name }}"
-      working-directory: ./Client #./Cloud-Infrastructure   
+
     - name: Archive NuGet Package
       uses: actions/upload-artifact@v1
       with:
