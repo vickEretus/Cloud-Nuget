@@ -48,11 +48,11 @@ jobs:
         run: |
           dotnet build
           dotnet publish
-        working-directory: ./YourProjectDirectory # Adjust to your project directory
+        working-directory: ./Client
 
       - name: Debug
         run: |
-          ls -l YourProject.csproj
+          ls -l Client/Client.csproj
           git status
         shell: bash
 
