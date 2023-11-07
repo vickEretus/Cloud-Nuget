@@ -24,7 +24,8 @@ jobs:
       - name: Auto-increment version
         run: |
           # Define the path to your .csproj file
-          csproj_file="Client.csproj"
+          
+          csproj_file="Client/Client.csproj"
           
           # Get the current version from the .csproj file
           current_version=$(grep -oPm1 "(?<=<Version>)[^<]+" "$csproj_file")
