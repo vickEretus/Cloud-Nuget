@@ -11,8 +11,8 @@
 	<Authors>Braden Fleming,Jordan Carvell,Victor Pineda,Robert Wood</Authors>
 	<Company>YCP RevMetrix</Company>
 	<PackageDescription>Internal use for the RevMetrix Team's Sim and App Team, duh</PackageDescription>
-	<PackageProjectUrl>https://github.com/vickEretus/TestNuget</PackageProjectUrl>
-	<PackageLicenseUrl>https://github.com/AspNetMonsters/vickEretus/blob/master/LICENSE</PackageLicenseUrl>
+	<PackageProjectUrl>https://github.com/vickEretus/Cloud-Nuget</PackageProjectUrl>
+	<PackageLicenseUrl>https://github.com/vickEretus/Cloud-Nuget/blob/master/LICENSE</PackageLicenseUrl>
 	<RepositoryType>git</RepositoryType>
 	<RepositoryUrl>https://github.com/vickEretus/TestNuget</RepositoryUrl>
 	<Nullable>enable</Nullable>
