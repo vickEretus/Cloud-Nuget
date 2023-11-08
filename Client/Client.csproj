@@ -29,11 +29,6 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     
   </ItemGroup>
-
-  <ItemGroup>
-    <!-- Include all source files from the "client" folder -->
-    <ProjectReference Include="..\Client\Client.csproj" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
   </ItemGroup>
