@@ -34,7 +34,6 @@ jobs:
             echo "Error: Current version not found in $csproj_file"
             exit 1
           fi
-
           # Increment the version as needed (e.g., patch version)
           IFS='.' read -r -a version_parts <<< "$current_version"
           new_patch=$((version_parts[2] + 1))
@@ -43,66 +42,20 @@ jobs:
           # Update the .csproj file with the new version
           sed -i "s/<Version>$current_version<\/Version>/<Version>$new_version<\/Version>/" "$csproj_file"
         shell: bash
-      - name: Common, Build and Publish
-        run: |
-        ##dotnet build
-        ##dotnet publish
-        working-directory: ./Common
 
-      - name: Common, Debug
+      - name: Build and Publish
         run: |
-          ls -l Common/Common.csproj
-          git status
-        shell: bash
-        
-      - name: Common, Commit Changes
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add .$csproj_file
-          git commit -m "Auto-increment version"
-        shell: bash
-        
-      - name: Common, Check for Changes
-        id: common_check_changes
-        run: |
-          git diff --exit-code || exit 0
-        shell: bash
-
-      - name: Common, Push Changes
-        if: steps.common_check_changes.outputs.return-code == '0'
-        run: |
-          git push
-        shell: bash
-
-      - name: Common, Create NuGet Package
-        run: dotnet pack Common.csproj -c Release
-        working-directory: ./Common
-
-      - name: Common, Publish NuGet Package
-        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
-        working-directory: ./Common
-
-      - name: Common, Archive NuGet Package
-        uses: actions/upload-artifact@v1
-        with:
-          name: Common
-          path: ./Common
-
-          
-      - name: Client, Build and Publish
-        run: |
-        ##dotnet build
-        ##dotnet publish
+          dotnet build
+          dotnet publish
         working-directory: ./Client
 
-      - name: Client, Debug
+      - name: Debug
         run: |
           ls -l Client/Client.csproj
           git status
         shell: bash
         
-      - name: Client, Commit Changes
+      - name: Commit Changes
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
@@ -110,27 +63,27 @@ jobs:
           git commit -m "Auto-increment version"
         shell: bash
         
-      - name: Client, Check for Changes
+      - name: Check for Changes
         id: check_changes
         run: |
           git diff --exit-code || exit 0
         shell: bash
 
-      - name: Client, Push Changes
+      - name: Push Changes
         if: steps.check_changes.outputs.return-code == '0'
         run: |
           git push
         shell: bash
 
-      - name: Client, Create NuGet Package
+      - name: Create NuGet Package
         run: dotnet pack Client.csproj -c Release
         working-directory: ./Client
 
-      - name: Client, Publish NuGet Package
+      - name: Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
         working-directory: ./Client
 
-      - name: Client, Archive NuGet Package
+      - name: Archive NuGet Package
         uses: actions/upload-artifact@v1
         with:
           name: Client
