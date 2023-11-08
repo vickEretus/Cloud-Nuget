@@ -25,11 +25,6 @@
     <None Include="../README.md " Pack="true" PackagePath="\"/>
   </ItemGroup>
   <ItemGroup>
-    <!-- Include all source files from the "common" folder -->
-    <ProjectReference Include="..\Common\Common.csproj" />
-
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Logs\" />
   </ItemGroup>
 </Project>
