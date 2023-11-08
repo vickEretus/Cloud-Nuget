@@ -80,8 +80,8 @@ jobs:
         run: dotnet pack -c Release
         working-directory: ./Client
 
-      - name: Update NuGet Package
-        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols true
+      - name: Publish NuGet Package
+        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} #--source https://api.nuget.org/v3/index.json --no-symbols true
         working-directory: ./Client
 
       - name: Archive NuGet Package
