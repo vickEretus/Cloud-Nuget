@@ -26,8 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Include all source files from the "common" folder -->
-    <ProjectReference Include="..\Common\Common.csproj" />
-    
+    <Folder Include="Common\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
