@@ -24,13 +24,6 @@
 	<None Include="../README.md " Pack="true" PackagePath="\"/>
 </ItemGroup>
 <ItemGroup>
-  <None Update="..\Common\**\*.*">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    <PackagePath>content\Common</PackagePath>
-  </None>
-</ItemGroup>
-
-<ItemGroup>
 	<Folder Include="Logs\" />
 </ItemGroup>
 
