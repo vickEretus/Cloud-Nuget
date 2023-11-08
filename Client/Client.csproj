@@ -24,10 +24,9 @@
   <ItemGroup>
     <None Include="../README.md " Pack="true" PackagePath="\"/>
   </ItemGroup>
-  <ItemGroup>
-    <!-- Include all source files from the "common" folder -->
-    <Folder Include="Common\" />
-  </ItemGroup>
+<files>
+  <file src="bin\Release\**\*.*" target="content" /> 
+</files>
   <ItemGroup>
     <Folder Include="Logs\" />
   </ItemGroup>
