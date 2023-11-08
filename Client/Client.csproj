@@ -26,13 +26,13 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Include all source files from the "common" folder -->
-    <Compile Include="../Common\**\*.cs" />
+    <ProjectReference Include="..\Common\Common.csproj" />
     <Link>Common\%(RecursiveDir)%(FileName)%(Extension)</Link>
   </ItemGroup>
 
   <ItemGroup>
     <!-- Include all source files from the "client" folder -->
-    <Compile Include="=../Client\**\*.cs" />
+    <ProjectReference Include="..\Client\Client.csproj" />
     <Link>Client\%(RecursiveDir)%(FileName)%(Extension)</Link>
   </ItemGroup>
   <ItemGroup>
