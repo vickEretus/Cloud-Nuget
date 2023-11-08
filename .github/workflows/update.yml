@@ -76,7 +76,7 @@ jobs:
         shell: bash
 
       - name: Create NuGet Package
-        run: dotnet pack Client.csproj -c Release
+        run: dotnet pack -c Release
         working-directory: ./Client
 
       - name: Publish NuGet Package
