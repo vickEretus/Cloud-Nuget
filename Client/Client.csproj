@@ -32,7 +32,7 @@
 
   <ItemGroup>
     <!-- Include all source files from the "client" folder -->
-    <ProjectReference Include="..\Client\Client.csproj" 
+    <ProjectReference Include="..\Client\Client.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
