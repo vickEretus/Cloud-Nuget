@@ -3,7 +3,7 @@
   <PropertyGroup>
 	<OutputType>Exe</OutputType>
 	<TargetFramework>net7.0</TargetFramework>
-	<PackageId>TESTINGClient3482093849023TESTINGClient3482093849023</PackageId>
+	<PackageId>TESTINGClient3482093849023TESTINGClient</PackageId>
 	<Version>1.0.22</Version>
 	<Copyright>RevMetrix 2023</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -20,15 +20,4 @@
 	<ImplicitUsings>enable</ImplicitUsings>
 	<IsPackable>true</IsPackable>
   </PropertyGroup>
-<ItemGroup>
-	<None Include="../README.md " Pack="true" PackagePath="\"/>
-</ItemGroup>
-<ItemGroup>
-	<!-- Include all source files from the "common" folder -->
-	<ProjectReference Include="..\Common\Common.csproj" />
-
-</ItemGroup>
-<ItemGroup>
-	<Folder Include="Logs\" />
-</ItemGroup>
 </Project>
