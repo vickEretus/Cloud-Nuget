@@ -24,9 +24,7 @@
   <ItemGroup>
     <None Include="../README.md " Pack="true" PackagePath="\"/>
   </ItemGroup>
-  <files>
-    <file src="bin\Release\**\*.*" target="content" /> 
-  </files>
+  <ProjectReference Include="..\Common\Common.csproj" />
   <ItemGroup>
     <Folder Include="Logs\" />
   </ItemGroup>
