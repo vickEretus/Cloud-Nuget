@@ -15,7 +15,7 @@
 	<PackageProjectUrl>https://github.com/vickEretus/Cloud-Nuget</PackageProjectUrl>
 	<PackageLicense>https://github.com/vickEretus/Cloud-Nuget/blob/master/LICENSE</PackageLicense>
 	<RepositoryType>git</RepositoryType>
-	<RepositoryUrl>https://github.com/vickEretus/TestNuget</RepositoryUrl>
+	<RepositoryUrl>https://github.com/vickEretus/Cloud-Nuge</RepositoryUrl>
 	<Nullable>enable</Nullable>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<IsPackable>true</IsPackable>
