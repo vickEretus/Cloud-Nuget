@@ -47,7 +47,7 @@ jobs:
       - name: Build and Publish
         run: |
           dotnet build
-          dotnet publish
+        ##dotnet publish
         working-directory: ./Client
 
       - name: Debug
