@@ -24,11 +24,12 @@
   <ItemGroup>
     <None Include="../README.md " Pack="true" PackagePath="\"/>
   </ItemGroup>
-  <ProjectReference Include="..\Common\Common.csproj" />
+  <ItemGroup>
+    <!-- Include all source files from the "common" folder -->
+    <ProjectReference Include="..\Common\Common.csproj" />
+
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
   </ItemGroup>
-  <Target Name="Build" BeforeTargets="Build">
-    <!-- Any other build-related tasks you may have -->
-  </Target>
 </Project>
