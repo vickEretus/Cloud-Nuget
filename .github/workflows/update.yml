@@ -25,7 +25,7 @@ jobs:
         run: |
           # Define the path to your .csproj file
           
-          csproj_file="./Client/Client.csproj"
+          csproj_file="../Client/Client.csproj"
           
           # Get the current version from the .csproj file
           current_version=$(grep -oPm1 "(?<=<Version>)[^<]+" "$csproj_file")
@@ -47,11 +47,11 @@ jobs:
         run: |
         ##dotnet build
         ##dotnet publish
-        working-directory: ./Client
+        working-directory: ../Common
 
       - name: Common, Debug
         run: |
-          ls -l Client/Client.csproj
+          ls -l Common/Common.csproj
           git status
         shell: bash
         
@@ -77,24 +77,24 @@ jobs:
 
       - name: Common, Create NuGet Package
         run: dotnet pack -c Release
-        working-directory: ./Common
+        working-directory: ../Common
 
       - name: Common, Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
-        working-directory: ./Common
+        working-directory: ../Common
 
       - name: Common, Archive NuGet Package
         uses: actions/upload-artifact@v1
         with:
           name: Common
-          path: ./Common
+          path: ../Common
 
           
       - name: Client, Build and Publish
         run: |
         ##dotnet build
         ##dotnet publish
-        working-directory: ./Client
+        working-directory: ../Client
 
       - name: Client, Debug
         run: |
@@ -124,14 +124,14 @@ jobs:
 
       - name: Client, Create NuGet Package
         run: dotnet pack -c Release
-        working-directory: ./Client
+        working-directory: ../Client
 
       - name: Client, Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
-        working-directory: ./Client
+        working-directory: ../Client
 
       - name: Client, Archive NuGet Package
         uses: actions/upload-artifact@v1
         with:
           name: Client
-          path: ./Client
+          path: ../Client
