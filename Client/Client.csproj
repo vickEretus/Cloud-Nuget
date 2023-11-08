@@ -27,13 +27,12 @@
   <ItemGroup>
     <!-- Include all source files from the "common" folder -->
     <ProjectReference Include="..\Common\Common.csproj" />
-    <Link>Common\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    
   </ItemGroup>
 
   <ItemGroup>
     <!-- Include all source files from the "client" folder -->
-    <ProjectReference Include="..\Client\Client.csproj" />
-    <Link>Client\%(RecursiveDir)%(FileName)%(Extension)</Link>
+    <ProjectReference Include="..\Client\Client.csproj" 
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
