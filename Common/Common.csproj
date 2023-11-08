@@ -1,9 +1,32 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>net7.0</TargetFramework>
+	<PackageId>TESTINGCommon3482093849023</PackageId>
+	<Version>1.0.22</Version>
+	<Copyright>RevMetrix 2023</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+	<Title>Client Settup for other teams to use refernces</Title>
+	<Description>RevMetrix</Description>
+	<Authors>Braden Fleming,Jordan Carvell,Victor Pineda,Robert Wood</Authors>
+	<Company>YCP RevMetrix</Company>
+	<PackageDescription>Internal use for the RevMetrix Team's Sim and App Team, duh</PackageDescription>
+	<PackageProjectUrl>https://github.com/vickEretus/Cloud-Nuget</PackageProjectUrl>
+	<PackageLicense>https://github.com/vickEretus/Cloud-Nuget/blob/master/LICENSE</PackageLicense>
+	<RepositoryType>git</RepositoryType>
+	<RepositoryUrl>https://github.com/vickEretus/Cloud-Nuget</RepositoryUrl>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<IsPackable>true</IsPackable>
   </PropertyGroup>
+	<ItemGroup>
+	<None Include="../README.md " Pack="true" PackagePath="\"/>
+</ItemGroup>
+<ItemGroup>
+	<Folder Include="Logs\" />
+</ItemGroup>
+
 
 </Project>
+
