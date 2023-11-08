@@ -47,7 +47,7 @@ jobs:
         run: |
         ##dotnet build
         ##dotnet publish
-        working-directory: ../Common
+        working-directory: /Common
 
       - name: Common, Debug
         run: |
