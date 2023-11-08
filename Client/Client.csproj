@@ -25,7 +25,7 @@
 </ItemGroup>
 <ItemGroup>
 	<!-- Include all source files from the "common" folder -->
-	  <PackageReference Include="Common" Version="1.0.x" />
+	  <PackageReference Include="Common" />
 
 </ItemGroup>
 <ItemGroup>
