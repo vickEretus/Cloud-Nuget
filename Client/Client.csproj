@@ -6,6 +6,7 @@
 	<PackageId>TESTINGClient3482093849023</PackageId>
 	<Version>1.0.11</Version>
 	<Copyright>RevMetrix 2023</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
 	<Title>Client Settup for other teams to use refernces</Title>
 	<Description>RevMetrix</Description>
 	<Authors>Braden Fleming,Jordan Carvell,Victor Pineda,Robert Wood</Authors>
