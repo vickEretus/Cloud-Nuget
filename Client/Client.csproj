@@ -26,12 +26,12 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Include all source files from the "common" folder -->
-    <Compile Include="common\**\*.cs" />
+    <Compile Include="../common\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Include all source files from the "client" folder -->
-    <Compile Include="client\**\*.cs" />
+    <Compile Include="="../client\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
