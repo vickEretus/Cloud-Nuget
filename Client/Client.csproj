@@ -4,7 +4,7 @@
 	<OutputType>Exe</OutputType>
 	<TargetFramework>net7.0</TargetFramework>
 	<PackageId>TESTINGClient3482093849023TESTINGClient3482093849023</PackageId>
-	<Version>1.0.27</Version>
+	<Version>1.0.28</Version>
 	<Copyright>RevMetrix 2023</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
 	<Title>Client Settup for other teams to use refernces</Title>
