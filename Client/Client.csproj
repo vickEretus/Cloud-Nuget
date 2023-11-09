@@ -17,12 +17,14 @@
 	<RepositoryType>git</RepositoryType>
 	<RepositoryUrl>https://github.com/vickEretus/Cloud-Nuget</RepositoryUrl>
 	<Nullable>enable</Nullable>
+
 	<ImplicitUsings>enable</ImplicitUsings>
 	<IsPackable>true</IsPackable>
   </PropertyGroup>
 	<ItemGroup>
 	<None Include="../README.md " Pack="true" PackagePath="\"/>
 </ItemGroup>
+<ItemGroup> <Reference Include="netstandard" /> </ItemGroup>
 <ItemGroup>
 	<Folder Include="Logs\" />
 </ItemGroup>
