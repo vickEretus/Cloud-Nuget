@@ -4,7 +4,7 @@
 	<OutputType>Library</OutputType>
 	<TargetFramework>net7.0</TargetFramework>
 	<PackageId>TESTINGCommon3482093849023</PackageId>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
 	<Copyright>RevMetrix 2023</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
 	<Title>Client Settup for other teams to use refernces</Title>
