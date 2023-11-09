@@ -79,7 +79,7 @@ jobs:
         working-directory: ./Client
 
       - name: Publish NuGet Package
-        run: dotnet nuget push ./Client/bin/Release/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
+        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
         working-directory: ./Client
 
       - name: Archive NuGet Package
