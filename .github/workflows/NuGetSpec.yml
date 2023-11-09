@@ -35,6 +35,3 @@ jobs:
       with:
         name: Your.Package.Id-nuspec
         path: Your.Package.Id.nuspec
-
-  artifacts:
-    nuspec: Your.Package.Id-nuspec
