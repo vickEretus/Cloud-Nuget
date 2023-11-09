@@ -1,4 +1,4 @@
-name: Build Common Project
+name: Build Common Project and Release to NuGet
 
 on:
   push:
@@ -24,3 +24,77 @@ jobs:
 
       - name: Build Common Project
         run: dotnet build Common/Common.csproj
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Auto-increment version
+        run: |
+          # Define the path to your .csproj file
+          csproj_file="./Common/Common.csproj"
+          
+          # Get the current version from the .csproj file
+          current_version=$(grep -oPm1 "(?<=<Version>)[^<]+" "$csproj_file")
+          
+          if [ -z "$current_version" ]; then
+            echo "Error: Current version not found in $csproj_file"
+            exit 1
+          fi
+          # Increment the version as needed (e.g., patch version)
+          IFS='.' read -r -a version_parts <<< "$current_version"
+          new_patch=$((version_parts[2] + 1))
+          new_version="${version_parts[0]}.${version_parts[1]}.$new_patch"
+          
+          # Update the .csproj file with the new version
+          sed -i "s/<Version>$current_version<\/Version>/<Version>$new_version<\/Version>/" "$csproj_file"
+        shell: bash
+
+      - name: Build and Publish
+        run: |
+          dotnet build
+          dotnet publish
+        working-directory: ./Common
+
+      - name: Commit Changes
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add .$csproj_file
+          git commit -m "Auto-increment version"
+        shell: bash
+        
+      - name: Check for Changes
+        id: check_changes
+        run: |
+          git diff --exit-code || exit 0
+        shell: bash
+
+      - name: Push Changes
+        if: steps.check_changes.outputs.return-code == '0'
+        run: |
+          git push
+        shell: bash
+
+      - name: Create NuGet Package
+        run: dotnet pack ./Common/Common.csproj -c Release
+        working-directory: ./Common
+
+      - name: Publish NuGet Package
+        run: dotnet nuget push ./Common/bin/Release/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
+        working-directory: ./Common
+
+      - name: Archive NuGet Package
+        uses: actions/upload-artifact@v1
+        with:
+          name: Common
+          path: ./Common
