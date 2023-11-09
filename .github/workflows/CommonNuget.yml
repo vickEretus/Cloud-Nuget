@@ -86,8 +86,11 @@ jobs:
         shell: bash
 
       - name: Create NuGet Package
-        run: dotnet pack ./Common.csproj -c Release
+        run: |
+          dotnet pack ./Common/Common.csproj -c Release
+          cp -r ./Common/artifacts/ ./Common/bin/Release/
         working-directory: ./Common
+
 
       - name: Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
