@@ -29,8 +29,8 @@
 	<Folder Include="Logs\" />
 </ItemGroup>
 <ItemGroup>
-  <Compile Include="Common\**\*.cs" />
-</ItemGroup>
-
+    <PackageReference Include="TESTINGCommon3482093849023"/>
+    <!-- Add more PackageReference elements as needed -->
+  </ItemGroup>
 
 </Project>
