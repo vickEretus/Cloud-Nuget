@@ -86,7 +86,7 @@ jobs:
         shell: bash
 
       - name: Create NuGet Package
-        run: dotnet pack Common/Common.csproj -c Release
+        run: dotnet pack ./Common.csproj -c Release
         working-directory: ./Common
 
       - name: Publish NuGet Package
