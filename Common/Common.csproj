@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
+	<OutputType>Library</OutputType>
 	<TargetFramework>net7.0</TargetFramework>
 	<PackageId>TESTINGCommon3482093849023</PackageId>
 	<Version>1.0.0</Version>
