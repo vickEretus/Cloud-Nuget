@@ -90,7 +90,7 @@ jobs:
         working-directory: ./Common
 
       - name: Publish NuGet Package
-        run: dotnet nuget push ./Common/bin/Release/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
+        run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
         working-directory: ./Common
 
       - name: Archive NuGet Package
