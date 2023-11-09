@@ -29,7 +29,7 @@
 	<Folder Include="Logs\" />
 </ItemGroup>
 <ItemGroup>
-  <Compile Include="Common\**\*.csproj" />
+  <Compile Include="Common\**\*.cs" />
 </ItemGroup>
 
 
