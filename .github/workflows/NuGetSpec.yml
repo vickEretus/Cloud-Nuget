@@ -1,0 +1,40 @@
+name: Create NuGet Specification File
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create .nuspec file
+      run: |
+        echo '<?xml version="1.0" encoding="utf-8"?>' > Your.Package.Id.nuspec
+        echo '<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">' >> Your.Package.Id.nuspec
+        echo '  <metadata>' >> Your.Package.Id.nuspec
+        echo '    <id>Your.Package.Id</id>' >> Your.Package.Id.nuspec
+        echo '    <version>1.0.0</version>' >> Your.Package.Id.nuspec
+        echo '    <authors>Your Name</authors>' >> Your.Package.Id.nuspec
+        echo '    <description>Your package description</description>' >> Your.Package.Id.nuspec
+        echo '    <dependencies>' >> Your.Package.Id.nuspec
+        echo '      <dependency id="Common" version="1.0.0" />' >> Your.Package.Id.nuspec
+        echo '    </dependencies>' >> Your.Package.Id.nuspec
+        echo '  </metadata>' >> Your.Package.Id.nuspec
+        echo '</package>' >> Your.Package.Id.nuspec
+        echo "NuGet specification file 'Your.Package.Id.nuspec' created."
+      working-directory: path/to/Your.Package.Id
+
+    - name: Save .nuspec as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Your.Package.Id-nuspec
+        path: Your.Package.Id.nuspec
+
+  artifacts:
+    nuspec: Your.Package.Id-nuspec
