@@ -20,4 +20,4 @@ jobs:
           dotnet-version: 7.0.x
 
       - name: Build Common Project
-        run: dotnet build path/to/Common.csproj
+        run: dotnet build Common/Common.csproj
