@@ -46,7 +46,7 @@ jobs:
         run: |
           dotnet build
           dotnet publish
-        working-directory: Client
+        working-directory: ./Client
 
       - name: Debug
         run: |
@@ -76,10 +76,6 @@ jobs:
 
       - name: Create NuGet Package
         run: dotnet pack ./Client/Client.csproj -c Release
-        working-directory: ./Client
-
-      - name: Restore NuGet Packages
-        run: dotnet restore ./Client/Client.csproj -c Release
         working-directory: ./Client
 
       - name: Publish NuGet Package
