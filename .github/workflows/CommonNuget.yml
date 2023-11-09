@@ -87,8 +87,8 @@ jobs:
 
       - name: Create NuGet Package
         run: |
+          cp -r ./Common/bin/Release/. ./Common/bin/Release/MyArtifacts/
           dotnet pack ./Common.csproj -c Release
-          cp -r ./Common/artifacts/ ./Common/bin/Release/
         working-directory: ./Common
 
 
