@@ -20,7 +20,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
-
+      - name: set shell script permissions
+        run: chmod +x ./build.sh
+  
+      - name: build and test
+        run: ./build.sh test
+        
       - name: Auto-increment version
         run: |
           # Define the path to your .csproj file
