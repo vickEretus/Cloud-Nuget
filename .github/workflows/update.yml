@@ -94,13 +94,16 @@ jobs:
           git push
         shell: bash
         
-      - name: Create NuGet Package
-        run: dotnet pack -c Release ./Client/Client.csproj
-        working-directory: ./Client
+      - name: Restore dependencies, build, and pack
+        run: |
+          dotnet restore
+          dotnet build
+          dotnet pack -c Release -o ./artifacts
 
       - name: Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
         working-directory: ./Client
+    
       - name: Archive NuGet Package
         uses: actions/upload-artifact@v1
         with:
