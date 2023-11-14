@@ -87,13 +87,15 @@ jobs:
         run: |
           git diff --exit-code || exit 0
         shell: bash
+        
       - name: Push Changes
         if: steps.check_changes.outputs.return-code == '0'
         run: |
           git push
         shell: bash
+        
       - name: Create NuGet Package
-        run: dotnet pack ./Client/Client.csproj -c Release
+        run: dotnet pack -c Release ./Client/Client.csproj
         working-directory: ./Client
 
       - name: Publish NuGet Package
