@@ -15,10 +15,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up .NET
-        run: sudo chmod +x ./dotnet-install.sh
-
+      - name: Install .NET SDK
+        run: |
+            mkdir -p $HOME/dotnet
+            export DOTNET_ROOT=$HOME/dotnet
+            curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 7.0
+            export PATH=$PATH:$HOME/dotnet
         
       - name: Auto-increment version
         run: |
