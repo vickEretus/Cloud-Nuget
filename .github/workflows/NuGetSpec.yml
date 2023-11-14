@@ -5,11 +5,6 @@ on:
   pull_request:
   workflow_dispatch:
     inputs:
-        publish:
-          type: boolean
-          description: 'Publish API to Digital Ocean'
-          required: true
-          default: false
         nuget:
           type: boolean
           description: 'Publish Client NuGet Package'
