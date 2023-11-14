@@ -53,11 +53,21 @@ jobs:
           # Update the .csproj file with the new version
           sed -i "s/<Version>$current_version<\/Version>/<Version>$new_version<\/Version>/" "$csproj_file"
         shell: bash
+        
       - name: Build and Publish
         run: |
           dotnet build
           dotnet publish
         working-directory: ./Client
+        
+      - name: Initialize Git
+        run: |
+          git init
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+
+        
       - name: Debug
         run: |
           ls -l Client/Client.csproj
