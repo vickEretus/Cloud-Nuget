@@ -17,12 +17,14 @@ jobs:
         uses: actions/checkout@v3
       - name: Install .NET SDK
         run: |
-            mkdir -p $HOME/dotnet
-            export DOTNET_ROOT=$HOME/dotnet
-            curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 7.0
-            export PATH=$PATH:$HOME/dotnet
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+          export DOTNET_ROOT=/path/to/your/dotnet
+          export PATH=$PATH:$DOTNET_ROOT
+          dotnet --version
+      - name: Build and Test
+        run: |
+          dotnet restore
+          dotnet build
+          dotnet test
         
       - name: Auto-increment version
         run: |
