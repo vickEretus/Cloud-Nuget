@@ -18,7 +18,11 @@ jobs:
             sudo chown -R $USER /usr/share/dotnet
             /home/hack/actions-runner/_work/_actions/actions/setup-dotnet/v3/externals/install-dotnet.sh --channel 7.0
 
-
+      - name: Install Git
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+          
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
