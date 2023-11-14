@@ -1,4 +1,5 @@
 name: Build and Release to Nuget
+
 on:
   push:
     branches:
@@ -6,55 +7,66 @@ on:
   workflow_dispatch:
   release:
     types: [published]
+
 jobs:
   build:
     runs-on: self-hosted
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-     
+
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0
+
+      - name: Install .NET SDK in User Directory
+        run: |
+          mkdir -p $HOME/dotnet
+          export DOTNET_ROOT=$HOME/dotnet
+          export PATH=$PATH:$HOME/dotnet
 
       - name: Build and Test
         run: |
           dotnet restore
           dotnet build
           dotnet test
-      
+
       - name: Auto-increment version
         run: |
           # Define the path to your .csproj file
           csproj_file="./Client/Client.csproj"
-          
+
           # Get the current version from the .csproj file
           current_version=$(grep -oPm1 "(?<=<Version>)[^<]+" "$csproj_file")
-          
+
           if [ -z "$current_version" ]; then
             echo "Error: Current version not found in $csproj_file"
             exit 1
           fi
+
           # Increment the version as needed (e.g., patch version)
           IFS='.' read -r -a version_parts <<< "$current_version"
           new_patch=$((version_parts[2] + 1))
           new_version="${version_parts[0]}.${version_parts[1]}.$new_patch"
-          
+
           # Update the .csproj file with the new version
           sed -i "s/<Version>$current_version<\/Version>/<Version>$new_version<\/Version>/" "$csproj_file"
         shell: bash
+
       - name: Build and Publish
         run: |
           dotnet build
           dotnet publish
         working-directory: ./Client
+
       - name: Debug
         run: |
           ls -l Client/Client.csproj
           git status
         shell: bash
-        
+
       - name: Commit Changes
         run: |
           git config --global user.name "${{ github.actor }}"
@@ -62,12 +74,13 @@ jobs:
           git add .$csproj_file
           git commit -m "Auto-increment version"
         shell: bash
-        
+
       - name: Check for Changes
         id: check_changes
         run: |
           git diff --exit-code || exit 0
         shell: bash
+
       - name: Push Changes
         if: steps.check_changes.outputs.return-code == '0'
         run: |
@@ -77,7 +90,6 @@ jobs:
       - name: Create NuGet Package
         run: dotnet pack ./Client/Client.csproj -c Release
         working-directory: ./Client
-      
 
       - name: Publish NuGet Package
         run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.API_KEY }} --source https://api.nuget.org/v3/index.json --no-symbols
