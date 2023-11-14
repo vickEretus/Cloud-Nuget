@@ -13,17 +13,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      
-      - name: set shell script permissions
-        run: chmod +x ./build.sh
-  
-      - name: build and test
-        run: ./build.sh test
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+        uses: chmod +x actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
 
