@@ -12,7 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-     
+      - name: Install .NET SDK
+        run: |
+            sudo mkdir -p /usr/share/dotnet
+            sudo chown -R $USER /usr/share/dotnet
+            /home/hack/actions-runner/_work/_actions/actions/setup-dotnet/v3/externals/install-dotnet.sh --channel 7.0
+
+
       - name: Set up .NET
         uses: sudo actions/setup-dotnet@v3
         with:
